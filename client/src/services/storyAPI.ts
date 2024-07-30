@@ -10,7 +10,6 @@ export const getStories = async (): Promise<Story[]> => {
 };
 
 export const createStory = async (story: Partial<Story>): Promise<Story> => {
-  console.log("Here1")
   const response = await axios.post<Story>(`${API_URL}/stories`, story);
   return response.data;
 };

@@ -12,7 +12,6 @@ export const getAllStories = async (req: Request, res: Response): Promise<void> 
 
 export const createStory = async (req: Request, res: Response): Promise<void> => {
   try {
-    console.log("here at story controller")
     const story = await storyService.createStory(req.body);
     res.status(201).json(story);
   } catch (error) {
