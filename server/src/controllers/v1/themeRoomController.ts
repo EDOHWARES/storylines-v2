@@ -37,13 +37,8 @@ export const createThemeRoom = async (req: Request, res: Response): Promise<void
             return;
         }
 
-        const { name, description, tags } = await themeRoomService.createThemeRoom(req.body);
-        const newThemeRoom: { name?: string; description?: string; tags?: string[] } = {};
-       
-        if (name !== undefined) newThemeRoom.name = name;
-        if (description !== undefined) newThemeRoom.description = description;
-        if (tags !== undefined) newThemeRoom.tags = tags;
-        res.status(201).json(newThemeRoom);
+        const themeRoom = await themeRoomService.createThemeRoom(req.body);
+        res.status(201).json(themeRoom);
     } catch (error) {
         console.error('Error creating theme room:', error);
         if (error instanceof MongooseError.ValidationError) {
@@ -54,7 +49,7 @@ export const createThemeRoom = async (req: Request, res: Response): Promise<void
             res.status(500).json({ message: 'Unexpected error while creating theme room', error: (error as Error).message });
         }
     }
-};
+}
 
 // http://localhost:5000/api/v1/theme-rooms/{themeRoomId}
 export const getSingleThemeRoom = async (req: Request, res: Response): Promise<void> => {
@@ -81,3 +76,38 @@ export const getSingleThemeRoom = async (req: Request, res: Response): Promise<v
         }
     }
 }
+
+// http://localhost:5000/api/v1/theme-rooms/:themeRoomId
+export const editThemeRoom = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { themeRoomId } = req.params;
+        const { name, description, tags } = req.body;
+
+        if (!mongoose.Types.ObjectId.isValid(themeRoomId)) {
+            res.status(400).json({ message: "Invalid theme room ID format" });
+            return;
+        }
+
+        const updateData: { name?: string, description?: string, tags?: string[] } = {};
+
+        if (name !== undefined) updateData.name = name;
+        if (description !== undefined) updateData.description = description;
+        if (Array.isArray(tags) && tags.every(tag => typeof tag === "string")) updateData.tags = tags;
+
+        if (Object.keys(updateData).length === 0) {
+            res.status(400).json({ message: "No valid fields to update" });
+            return;
+        }
+
+        await themeRoomService.editThemeRoom(updateData, new mongoose.Types.ObjectId(themeRoomId));
+
+        res.status(200).json({ message: "Theme room updated successfully" });
+    } catch (error) {
+        if (error instanceof Error && error.message === "Theme room not found") {
+            res.status(404).json({ message: error.message });
+        } else {
+            console.error("Error editing theme room: ", error);
+            res.status(500).json({ message: "An error occurred while editing the theme room" });
+        }
+    }
+};

@@ -10,5 +10,7 @@ router.post('/', themeRoomControllerV1.createThemeRoom);
 
 // http://localhost:5000/api/v1/theme-rooms/{themeRoomId}
 router.get('/:themeRoomId', themeRoomControllerV1.getSingleThemeRoom)
+// http://localhost:5000/api/v1/theme-rooms/{themeRoomId}
+router.patch('/:themeRoomId', themeRoomControllerV1.editThemeRoom)
 
 export default router

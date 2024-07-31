@@ -37,7 +37,7 @@ export const createThemeRoom = async (themeRoomData: Partial<IThemeRoom>): Promi
         if (themeRoomData.description.length > 100) {
             throw new Error('Description must not exceed 100 characters');
         }
-        
+
         const themeRoom = new ThemeRoom(themeRoomData);
         const savedThemeRoom = await themeRoom.save();
         return savedThemeRoom;
@@ -53,15 +53,15 @@ export const createThemeRoom = async (themeRoomData: Partial<IThemeRoom>): Promi
             throw new Error(`Error creating theme room: ${(error as Error).message}`);
         }
     }
-};
+}
 
 // http://localhost:5000/api/v1/theme-rooms/{themeRoomId}
-export const getSingleThemeRoom = async (id: string): Promise<IThemeRoom> => {
+export const getSingleThemeRoom = async (themeRoomId: string): Promise<IThemeRoom> => {
     try {
-        if (!mongoose.Types.ObjectId.isValid(id)) {
+        if (!mongoose.Types.ObjectId.isValid(themeRoomId)) {
             throw new Error('Invalid theme room ID format');
         }
-        const themeRoom = await ThemeRoom.findById(id);
+        const themeRoom = await ThemeRoom.findById(themeRoomId);
         if (!themeRoom) {
             throw new Error('Theme room not found');
         }
@@ -73,6 +73,31 @@ export const getSingleThemeRoom = async (id: string): Promise<IThemeRoom> => {
             throw new Error(`Database error while fetching theme room: ${error.message}`);
         } else {
             throw new Error(`Error fetching theme room: ${(error as Error).message}`);
+        }
+    }
+}
+
+// http://localhost:5000/api/v1/theme-rooms/:themeRoomId
+export const editThemeRoom = async (themeRoomData: Partial<IThemeRoom>, themeRoomId: mongoose.Types.ObjectId): Promise<void> => {
+    try {
+        if (!mongoose.Types.ObjectId.isValid(themeRoomId)) {
+            throw new Error('Invalid theme room ID format');
+        }
+
+        const result = await ThemeRoom.updateOne({ _id: themeRoomId }, { $set: themeRoomData });
+        if (result.matchedCount === 0) {
+            throw new Error("Theme room not found");
+        }
+        if (result.modifiedCount === 0) {
+            console.log("No changes were made to the theme room");
+        }
+    } catch (error) {
+        if (error instanceof mongoose.Error.DocumentNotFoundError) {
+            throw new Error("Theme room not found");
+        } else if (error instanceof MongooseError) {
+            throw new Error(`Database error while updating theme room: ${error.message}`);
+        } else {
+            throw new Error(`Error updating theme room: ${(error as Error).message}`);
         }
     }
 }
