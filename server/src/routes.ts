@@ -27,7 +27,7 @@ interface VersionedRequest extends Request {
 // Use the routes without switching based on version
 router.use('/v1/stories', storyRoutesV1);
 router.use('/v1/users', userRoutesV1);
-router.use('/v1/themerooms', themeRoomRoutesV1);
+router.use('/v1/theme-rooms', themeRoomRoutesV1);
 
 // Catch-all for invalid routes
 router.use('*', (req: Request, res: Response) => {
