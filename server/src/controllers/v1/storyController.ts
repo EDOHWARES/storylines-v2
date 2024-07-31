@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import * as storyService from "../../services/v1/storyService";
 import mongoose from "mongoose";
 
+
+// http://localhost:5000/api/v1/stories
 export const fetchAllStories = async (req: Request, res: Response): Promise<void> => {
   try {
     const stories = await storyService.fetchAllStories();
@@ -11,22 +13,24 @@ export const fetchAllStories = async (req: Request, res: Response): Promise<void
   }
 }
 
+// http://localhost:5000/api/v1/stories/{storyId}
 export const fetchSingleStory = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { id } = req.params;
-    const story = await storyService.fetchSingleStory(id);
+    const { storyId } = req.params;
+    const story = await storyService.fetchSingleStory(storyId);
     res.json(story);
   } catch (error) {
     res.status(500).json({ message: "Error locating story", error });
   }
 }
 
+// http://localhost:5000/api/v1/stories
 export const createStory = async (req: Request, res: Response): Promise<void> => {
   try {
     const { title, type, content, author, themeRoomId, prev } = req.body;
     const story = await storyService.createStory({
       title,
-      type : type || "child",
+      type: type || "child",
       content,
       author: author.map((id: string) => new mongoose.Types.ObjectId(id)),
       themeRoomId: new mongoose.Types.ObjectId(themeRoomId),
@@ -39,19 +43,20 @@ export const createStory = async (req: Request, res: Response): Promise<void> =>
   }
 };
 
-export const fetchStoriesByThemeRooms = async(req: Request, res: Response): Promise<void> => {
+// http://localhost:5000/api/v1/stories/theme-rooms
+export const fetchStoriesByThemeRooms = async (req: Request, res: Response): Promise<void> => {
   try {
     const storiesByThemeRooms = await storyService.fetchStoriesByThemeRooms();
     res.json(storiesByThemeRooms);
-  } catch(error) {
+  } catch (error) {
     console.error(error);
-    res.status(500).json({message: 'Error fetching stories by theme rooms', error});
+    res.status(500).json({ message: 'Error fetching stories by theme rooms', error });
   }
 }
 
-export const fetchStoriesByThemeRoomId = async(req: Request, res: Response): Promise<void> => {
+// http://localhost:5000/api/v1/stories/theme-rooms/{themeRoomId}
+export const fetchStoriesByThemeRoomId = async (req: Request, res: Response): Promise<void> => {
   try {
-    console.log("here to fetch stories by theme room id")
     const { themeRoomId } = req.params;
     if (!mongoose.Types.ObjectId.isValid(themeRoomId)) {
       res.status(400).json({ message: 'Invalid themeRoomId' });
@@ -59,8 +64,61 @@ export const fetchStoriesByThemeRoomId = async(req: Request, res: Response): Pro
     }
     const stories = await storyService.fetchStoriesByThemeRoomId(themeRoomId);
     res.json(stories);
-  } catch(error) {
+  } catch (error) {
     console.error(error);
-    res.status(500).json({message: 'Error fetching stories for theme room', error});
+    res.status(500).json({ message: 'Error fetching stories for theme room', error });
   }
 }
+
+// http://localhost:5000/api/v1/stories/{storyId}
+export const deleteSingleStory = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { storyId } = req.params;
+
+    await storyService.deleteSingleStory(storyId);
+    res.status(200).json({ message: "Story successfully deleted" });
+  } catch (error) {
+    console.error(error);
+    if (error instanceof Error && error.message === "Story not found") {
+      res.status(404).json({ message: 'Story not found' });
+    } else {
+      res.status(500).json({ message: 'Error while deleting story', error });
+    }
+  }
+}
+
+// http://localhost:5000/api/v1/stories/{storyId}
+export const editStory = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { storyId } = req.params;
+    const { title, content } = req.body;
+
+    // Validate storyId
+    if (!mongoose.Types.ObjectId.isValid(storyId)) {
+      res.status(400).json({ message: "Invalid story ID" });
+      return;
+    }
+
+    // Create an object with only the fields that are present
+    const updateData: {title?: string, content?: string} = {};
+    if (title !== undefined) updateData.title = title;
+    if (content !== undefined) updateData.content = content;
+
+    // Check if there's anything to update
+    if (Object.keys(updateData).length === 0) {
+      res.status(400).json({ message: "No valid fields to update" });
+      return;
+    }
+
+    await storyService.editStory(updateData, new mongoose.Types.ObjectId(storyId));
+
+    res.status(200).json({ message: "Story updated successfully" });
+  } catch (error) {
+    if (error instanceof Error && error.message === "Story not found") {
+      res.status(404).json({ message: "Story not found" });
+    } else {
+      console.error("Error editing story:", error);
+      res.status(500).json({ message: "An error occurred while editing the story" });
+    }
+  }
+};
