@@ -2,11 +2,11 @@ import Story, { IStory } from "../../models/Story";
 import ThemeRoom, {IThemeRoom} from "../../models/ThemeRoom";
 import mongoose from "mongoose";
 
-export const getAllStories = async (): Promise<IStory[]> => {
+export const fetchAllStories = async (): Promise<IStory[]> => {
     return Story.find().sort({ createdAt: -1 });
 }
 
-export const getSingleStory = async (id: string): Promise<IStory | null> => {
+export const fetchSingleStory = async (id: string): Promise<IStory | null> => {
     const currId = new mongoose.Types.ObjectId(id);
     return Story.findById(currId);
 }
@@ -26,7 +26,7 @@ export const createStory = async (storyData: Partial<IStory>): Promise<IStory> =
         newStory.prev = newStory.prev.map(id => new mongoose.Types.ObjectId(id));
         // Update the 'next' field of the previous stories
         for (const prevStoryId of newStory.prev) {
-            const prevStory = await getSingleStory(prevStoryId.toString());
+            const prevStory = await fetchSingleStory(prevStoryId.toString());
             if (prevStory) {
                 prevStory.next = prevStory.next || [];
                 prevStory.next.push(_id);
@@ -38,7 +38,7 @@ export const createStory = async (storyData: Partial<IStory>): Promise<IStory> =
     return story.save();
 };
 
-export const getStoriesByThemeRooms = async(): Promise<{stories: IStory[] }[]> => {
+export const fetchStoriesByThemeRooms = async(): Promise<{stories: IStory[] }[]> => {
     const themeRooms = await ThemeRoom.find({}, '_id').lean();
     
     const storiesByThemeRooms = await Promise.all(themeRooms.map(async (themeRoom) => {
@@ -53,7 +53,7 @@ export const getStoriesByThemeRooms = async(): Promise<{stories: IStory[] }[]> =
 }
 
 
-export const getStoriesByThemeRoomId = async(themeRoomId: string): Promise<IStory[]> => {
+export const fetchStoriesByThemeRoomId = async(themeRoomId: string): Promise<IStory[]> => {
     const objectId = new mongoose.Types.ObjectId(themeRoomId);
     const stories = await Story.find({ themeRoomId: objectId }).populate('author', 'name');
     return stories;

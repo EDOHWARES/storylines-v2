@@ -2,19 +2,19 @@ import { Request, Response } from "express";
 import * as storyService from "../../services/v1/storyService";
 import mongoose from "mongoose";
 
-export const getAllStories = async (req: Request, res: Response): Promise<void> => {
+export const fetchAllStories = async (req: Request, res: Response): Promise<void> => {
   try {
-    const stories = await storyService.getAllStories();
+    const stories = await storyService.fetchAllStories();
     res.json(stories);
   } catch (error) {
     res.status(500).json({ message: "Error fetching stories", error });
   }
 }
 
-export const getSingleStory = async (req: Request, res: Response): Promise<void> => {
+export const fetchSingleStory = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    const story = await storyService.getSingleStory(id);
+    const story = await storyService.fetchSingleStory(id);
     res.json(story);
   } catch (error) {
     res.status(500).json({ message: "Error locating story", error });
@@ -39,9 +39,9 @@ export const createStory = async (req: Request, res: Response): Promise<void> =>
   }
 };
 
-export const getStoriesByThemeRooms = async(req: Request, res: Response): Promise<void> => {
+export const fetchStoriesByThemeRooms = async(req: Request, res: Response): Promise<void> => {
   try {
-    const storiesByThemeRooms = await storyService.getStoriesByThemeRooms();
+    const storiesByThemeRooms = await storyService.fetchStoriesByThemeRooms();
     res.json(storiesByThemeRooms);
   } catch(error) {
     console.error(error);
@@ -49,7 +49,7 @@ export const getStoriesByThemeRooms = async(req: Request, res: Response): Promis
   }
 }
 
-export const getStoriesByThemeRoomId = async(req: Request, res: Response): Promise<void> => {
+export const fetchStoriesByThemeRoomId = async(req: Request, res: Response): Promise<void> => {
   try {
     console.log("here to fetch stories by theme room id")
     const { themeRoomId } = req.params;
@@ -57,7 +57,7 @@ export const getStoriesByThemeRoomId = async(req: Request, res: Response): Promi
       res.status(400).json({ message: 'Invalid themeRoomId' });
       return;
     }
-    const stories = await storyService.getStoriesByThemeRoomId(themeRoomId);
+    const stories = await storyService.fetchStoriesByThemeRoomId(themeRoomId);
     res.json(stories);
   } catch(error) {
     console.error(error);
