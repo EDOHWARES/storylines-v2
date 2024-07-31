@@ -1,21 +1,40 @@
 import { Request, Response } from "express";
 import * as storyService from "../../services/v1/storyService";
+import mongoose from "mongoose";
 
 export const getAllStories = async (req: Request, res: Response): Promise<void> => {
   try {
     const stories = await storyService.getAllStories();
-    res.json(stories)
+    res.json(stories);
   } catch (error) {
-    res.status(500).json({ message: "Error fetching stories", error })
+    res.status(500).json({ message: "Error fetching stories", error });
+  }
+}
+
+export const getSingleStory = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+    const story = await storyService.getSingleStory(id);
+    res.json(story);
+  } catch (error) {
+    res.status(500).json({ message: "Error locating story", error });
   }
 }
 
 export const createStory = async (req: Request, res: Response): Promise<void> => {
   try {
-    const story = await storyService.createStory(req.body);
+    const { title, type, content, author, themeRoomId, prev } = req.body;
+    const story = await storyService.createStory({
+      title,
+      type : type || "child",
+      content,
+      author: author.map((id: string) => new mongoose.Types.ObjectId(id)),
+      themeRoomId: new mongoose.Types.ObjectId(themeRoomId),
+      prev: prev ? prev.map((id: string) => new mongoose.Types.ObjectId(id)) : []
+    });
     res.status(201).json(story);
   } catch (error) {
-    console.error(error)
+    console.error(error);
     res.status(500).json({ message: 'Error creating story', error });
   }
 };
