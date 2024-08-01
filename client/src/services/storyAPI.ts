@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Story } from '../types/Story';
 import {User} from "../types/User"
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = '/api/v1';
 
 export const getStories = async (): Promise<Story[]> => {
   const response = await axios.get<Story[]>(`${API_URL}/stories`);
