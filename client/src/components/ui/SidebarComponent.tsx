@@ -1,12 +1,13 @@
+"use client";
 import React, { useContext, createContext, useState } from "react";
 import { MoreVertical, ChevronLast, ChevronFirst } from "lucide-react";
 import { ModeToggle } from "../common/mode-toggle";
 
-const SidebarContext = createContext();
+const SidebarContext = createContext<{ expanded: boolean }>({ expanded: false });
 
-export function SidebarBody({ children }) {
+export function SidebarBody({ children }: { children: React.ReactNode }) {
   const [expanded, setExpanded] = useState(false);
-
+  
   return (
     <aside className={`
       h-screen
@@ -29,20 +30,24 @@ export function SidebarBody({ children }) {
           </button>
         </div>
         <SidebarContext.Provider value={{ expanded }}>
-          <ul className="flex-1 px-3 overflow-y-auto">{children}</ul>
+          <ul className="flex-1 px-3 overflow-y-auto overflow-x-hidden">{children}</ul>
         </SidebarContext.Provider>
         <div className="border-t border-primary/10 flex p-3">
           <img
             src="https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true"
             alt=""
-            className="w-10 h-10 rounded-md"
+            className="w-10 h-10 rounded-md flex-shrink-0"
           />
-          <div className={`flex justify-between items-center overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"}`}>
-            <div className="leading-4">
-              <h4 className="font-semibold">John Doe</h4>
-              <span className="text-xs text-muted-foreground">johndoe@gmail.com</span>
+          <div className={`
+            flex justify-between items-center
+            overflow-hidden transition-all
+            ${expanded ? "w-52 ml-3" : "w-0"}
+          `}>
+            <div className="leading-4 overflow-hidden">
+              <h4 className="font-semibold truncate">John Doe</h4>
+              <span className="text-xs text-muted-foreground truncate">johndoe@gmail.com</span>
             </div>
-            <MoreVertical size={20} className="text-muted-foreground" />
+            <MoreVertical size={20} className="text-muted-foreground flex-shrink-0" />
           </div>
         </div>
         <div className={`p-3 ${expanded ? '' : 'flex justify-center'}`}>
@@ -53,7 +58,13 @@ export function SidebarBody({ children }) {
   );
 }
 
-export function SidebarItem({ icon, text, active }) {
+interface SidebarItemProps {
+  icon: React.ReactNode;
+  text: string;
+  active: boolean;
+}
+
+export function SidebarItem({ icon, text, active }: SidebarItemProps) {
   const { expanded } = useContext(SidebarContext);
   return (
     <li
@@ -68,7 +79,9 @@ export function SidebarItem({ icon, text, active }) {
       `}
     >
       {icon}
-      <span className={`overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"}`}>{text}</span>
+      <span className={`overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"}`}>
+        {text}
+      </span>
       {!expanded && (
         <div
           className={`

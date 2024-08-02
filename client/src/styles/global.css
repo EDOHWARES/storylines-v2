@@ -70,9 +70,9 @@
   }
 }
 
-/* html {
+html {
   font-family: 'Plus Jakarta Sans', sans-serif;
-} */
+}
 
 body {
   @apply bg-background text-foreground;
