@@ -1,8 +1,6 @@
 "use client";
 import React, { useContext, createContext, useState } from "react";
 import { MoreVertical, ChevronLast, ChevronFirst } from "lucide-react";
-import { ModeToggle } from "../common/mode-toggle";
-
 const SidebarContext = createContext<{ expanded: boolean }>({ expanded: false });
 
 export function SidebarBody({ children }: { children: React.ReactNode }) {
@@ -49,9 +47,6 @@ export function SidebarBody({ children }: { children: React.ReactNode }) {
             </div>
             <MoreVertical size={20} className="text-muted-foreground flex-shrink-0" />
           </div>
-        </div>
-        <div className={`p-3 ${expanded ? '' : 'flex justify-center'}`}>
-          <ModeToggle />
         </div>
       </nav>
     </aside>
