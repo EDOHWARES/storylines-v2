@@ -4,6 +4,8 @@ import Home from './pages/Home';
 import Favorites from './pages/Favorites';
 import Settings from './pages/Settings';
 import Help from './pages/Help';
+import ThemeRoomStories from './pages/theme-room-stories/ThemeRoomStories';
+import StoryDetails from './pages/story/StoryDetails';
 
 const App: React.FC = () => {
   return (
@@ -13,6 +15,8 @@ const App: React.FC = () => {
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/help" element={<Help />} />
+        <Route path="/room/:id" element={<ThemeRoomStories />} />
+        <Route path="story/:id" element = {<StoryDetails />} />
       </Routes>
     </div>
   );

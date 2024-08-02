@@ -104,3 +104,8 @@ export const editStory = async (storyData: Partial<IStory>, id: mongoose.Types.O
         console.log("No changes were made to the story");
     }
 }
+
+// http://localhost:5000/api/v1/stories/filtered
+export const filteredStories = async(storyIds : <String[]>) : Promise<Story[]> => {
+    return;
+}

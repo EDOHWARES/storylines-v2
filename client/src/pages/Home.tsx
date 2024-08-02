@@ -1,5 +1,5 @@
-"use client";
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ThemeRoom } from "../types/ThemeRoom";
 import { getAllThemeRooms } from "../services/themeRoomAPI";
 import LoadingScreen from "../components/layout/LoadingScreen"
@@ -7,11 +7,11 @@ import { Search, Plus } from 'lucide-react';
 import { capitalize } from "../utils/capitalize"
 
 const Home = () => {
-
   const [themeRooms, setThemeRooms] = useState<ThemeRoom[]>([]);
   const [error, setError] = useState<string | null>('');
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchThemeRooms = async () => {
@@ -20,19 +20,16 @@ const Home = () => {
         const response = await getAllThemeRooms();
         setThemeRooms(response);
       } catch (error) {
-        setError(error)
+        setError(error as string);
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
     }
-
     fetchThemeRooms();
   }, []);
 
   if (isLoading) {
-    return (
-      <LoadingScreen />
-    )
+    return <LoadingScreen />;
   }
 
   if (error) return <div>Error: {error}</div>;
@@ -42,6 +39,10 @@ const Home = () => {
     room.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
     room.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
   );
+
+  const handleRoomClick = (roomId: string) => {
+    navigate(`/room/${roomId}`);
+  };
 
   return (
     <div className="flex-grow p-8 overflow-y-auto">
@@ -65,7 +66,11 @@ const Home = () => {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredRooms.map((room) => (
-            <div key={room._id} className="rounded-xl p-6 h-full flex flex-col transition-all duration-300 ease-in-out group-hover:shadow-lg group-hover:-translate-y-1">
+            <div 
+              key={room._id} 
+              className="rounded-xl p-6 h-full flex flex-col transition-all duration-300 ease-in-out hover:shadow-lg hover:-translate-y-1 cursor-pointer"
+              onClick={() => handleRoomClick(room._id)}
+            >
               <h2 className="text-xl font-semibold mb-2">{room.name}</h2>
               <p className="mb-4 flex-grow">{room.description}</p>
               <div className="flex flex-wrap gap-2">
@@ -80,7 +85,7 @@ const Home = () => {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Home
+export default Home;

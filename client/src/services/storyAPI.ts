@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { Story } from '../types/Story';
-import {User} from "../types/User"
 
 const API_URL = '/api/v1';
 
@@ -14,8 +13,12 @@ export const createStory = async (story: Partial<Story>): Promise<Story> => {
   return response.data;
 };
 
-export const createUser = async (user:Partial<User>) : Promise<User> => {
-  console.log("Here to create user");
-  const response = await axios.post<User>(`${API_URL}/users`, user);
-  return response.data;
+export const fetchStoriesByThemeRoomId = async(id: string) : Promise<Story[]> => {
+  const response = await axios.get<Story[]>(`${API_URL}/stories/theme-rooms/${id}`)
+  return response.data
+}
+
+export const fetchSingleStory = async(id:string) : Promise<Story> => {
+  const response = await axios.get<Story>(`${API_URL}/stories/${id}`)
+  return response.data
 }
