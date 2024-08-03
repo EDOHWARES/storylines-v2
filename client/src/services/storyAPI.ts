@@ -25,7 +25,6 @@ export const fetchSingleStory = async(id:string) : Promise<Story> => {
 
 export const fetchFilteredStories = async (storyIds: string[]): Promise<Story[]> => {
   if (storyIds.length === 0) {
-    console.warn('No story IDs provided to fetchFilteredStories');
     return [];
   }
 

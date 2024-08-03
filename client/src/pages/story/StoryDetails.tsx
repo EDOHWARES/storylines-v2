@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, Navigate, Link } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { Story } from "../../types/Story";
 import LoadingScreen from '../../components/layout/LoadingScreen';
 import { fetchFilteredStories } from '../../services/storyAPI';
+import { ChevronLeft, ChevronRight, ArrowLeft } from 'lucide-react';
 
 interface LocationState {
   currentStory: Story;
@@ -15,9 +16,16 @@ interface LocationState {
 
 const StoryDetails = () => {
   const location = useLocation();
-  const [state, setState] = useState<LocationState | undefined>(location.state as LocationState | undefined);
+  const [state, setState] = useState<LocationState | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (location.state) {
+      setState(location.state as LocationState);
+    }
+  }, [location]);
 
   useEffect(() => {
     const fetchMissingStories = async () => {
@@ -28,9 +36,7 @@ const StoryDetails = () => {
       setIsLoading(true);
       try {
         const allStoriesToFind = [...prevStoriesToFind, ...nextStoriesToFind];
-        // console.log('Sending storyIds to backend:', allStoriesToFind); // Debug log
         const missingStories = await fetchFilteredStories(allStoriesToFind);
-        // console.log('Received missing stories:', missingStories); // Debug log
         
         const newPrevStories = [
           ...prevStories,
@@ -49,7 +55,6 @@ const StoryDetails = () => {
           nextStoriesToFind: []
         }));
       } catch (err) {
-        // console.error('Error in fetchMissingStories:', err); // Detailed error logging
         setError("Unable to fetch related stories")
       } finally {
         setIsLoading(false);
@@ -59,27 +64,42 @@ const StoryDetails = () => {
     fetchMissingStories();
   }, [state]);
 
-  if (!state || !state.currentStory) {
-    return <Navigate to={`/room/${state?.themeRoomId || ''}`} replace />;
-  }
+  const handleStoryClick = (story: Story) => {
+    const newState: LocationState = {
+      currentStory: story,
+      prevStories: [],
+      nextStories: [], 
+      prevStoriesToFind: story.prev,
+      nextStoriesToFind: story.next,
+      themeRoomId: state ? state.themeRoomId : ''
+    };
+    navigate(`/story/${story._id}`, { state: newState });
+  };
 
-  const { currentStory, prevStories, nextStories, themeRoomId } = state;
-
-  const renderStoryLink = (story: Story, label: string) => (
-    <Link
-      to={`/story/${story._id}`}
-      state={{ ...state, currentStory: story }}
-      className="text-blue-500 hover:underline"
+  const renderStoryLink = (story: Story, label: string, icon: React.ReactNode) => (
+    <button
+      onClick={() => handleStoryClick(story)}
+      className="flex items-center px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors duration-200 ease-in-out"
     >
-      {label}
-    </Link>
+      {icon}
+      <span className="ml-2">{label}</span>
+    </button>
   );
 
-  const renderStoryPreview = (story: Story) => (
-    <div key={story._id} className="mb-4 p-4 border rounded shadow">
+  const renderStoryPreview = (story: Story, type: 'prev' | 'next') => (
+    <div key={story._id} className="mb-4 p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 ease-in-out">
       <h3 className="text-xl font-semibold mb-2">{story.title}</h3>
-      <p className="mb-2">{story.content.substring(0, 100)}...</p>
-      {renderStoryLink(story, "Read full story")}
+      <p className="mb-4 text-gray-600">{story.content.substring(0, 100)}...</p>
+      <div className="flex justify-between items-center">
+        <span className="text-sm text-gray-500">
+          by {story.author.join(', ')}
+        </span>
+        {renderStoryLink(
+          story, 
+          type === 'prev' ? "Read previous" : "Read next",
+          type === 'prev' ? <ChevronLeft size={16} /> : <ChevronRight size={16} />
+        )}
+      </div>
     </div>
   );
 
@@ -87,68 +107,65 @@ const StoryDetails = () => {
     return <LoadingScreen />;
   }
 
+  if (!state) {
+    return <div className="flex justify-center items-center h-screen">
+      <p className="text-xl text-gray-600">Error: No story data available</p>
+    </div>;
+  }
+
+  const { currentStory, prevStories, nextStories, themeRoomId } = state;
+
   return (
-    <div className="p-8 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold mb-4">{currentStory.title}</h1>
-      
-      <div className="mb-4 flex justify-between text-sm">
-        <div>
-          {prevStories.map((story, index) => (
-            <span key={story._id} className="mr-2">
-              {renderStoryLink(story, `← Previous ${index + 1}`)}
-            </span>
-          ))}
-        </div>
-        <div>
-          {nextStories.map((story, index) => (
-            <span key={story._id} className="ml-2">
-              {renderStoryLink(story, `Next ${index + 1} →`)}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      <div className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">Previous Stories</h2>
-        {prevStories.length > 0 ? (
-          prevStories.map(renderStoryPreview)
-        ) : (
-          <p>No previous stories.</p>
-        )}
-      </div>
-
-      <div className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">Current Story</h2>
-        <p className="mb-4 whitespace-pre-wrap">{currentStory.content}</p>
-        <div className="mt-4">
-          <h3 className="text-xl font-semibold mb-2">Authors:</h3>
-          <ul className="list-disc list-inside">
-            {currentStory.author.map((author, index) => (
-              <li key={index}>{author}</li>
-            ))}
-          </ul>
-        </div>
-      </div>
-
-      <div className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">Next Stories</h2>
-        {nextStories.length > 0 ? (
-          nextStories.map(renderStoryPreview)
-        ) : (
-          <p>No next stories.</p>
-        )}
-      </div>
-
-      {error && (
-        <div className="mt-4 text-sm text-red-600">
-          <p>{error}</p>
-        </div>
-      )}
-
-      <div className="mt-8">
-        <Link to={`/room/${themeRoomId}`} className="text-blue-500 hover:underline">
-          ← Back to Theme Room
+    <div className="bg-gray-100 min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto">
+        <Link to={`/room/${themeRoomId}`} className="inline-flex items-center text-blue-500 hover:text-blue-600 mb-8">
+          <ArrowLeft size={20} className="mr-2" />
+          Back to Theme Room
         </Link>
+        
+        <h1 className="text-4xl font-bold mb-6 text-gray-800">{currentStory.title}</h1>
+        
+        <div className="bg-white rounded-lg shadow-md p-8 mb-8">
+          <p className="mb-6 text-gray-700 leading-relaxed whitespace-pre-wrap">{currentStory.content}</p>
+          <div className="mt-6">
+            <h3 className="text-xl font-semibold mb-2 text-gray-800">Authors:</h3>
+            <ul className="list-disc list-inside text-gray-600">
+              {currentStory.author.map((author, index) => (
+                <li key={index}>{author}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {(prevStories.length > 0 || nextStories.length > 0) && (
+          <div className="mb-12">
+            <h2 className="text-2xl font-semibold mb-4 text-gray-800">Story Connections</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <h3 className="text-xl font-semibold mb-3 text-gray-700">Previous Stories</h3>
+                {prevStories.length > 0 ? (
+                  prevStories.map(story => renderStoryPreview(story, 'prev'))
+                ) : (
+                  <p className="text-gray-500">No previous stories.</p>
+                )}
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold mb-3 text-gray-700">Next Stories</h3>
+                {nextStories.length > 0 ? (
+                  nextStories.map(story => renderStoryPreview(story, 'next'))
+                ) : (
+                  <p className="text-gray-500">No next stories.</p>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {error && (
+          <div className="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+            <p>{error}</p>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,13 +1,14 @@
 "use client";
 import React, { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import LoadingScreen from '../../components/layout/LoadingScreen';
 import { ThemeRoom } from '../../types/ThemeRoom';
 import { Story } from "../../types/Story"
 import { getSingleThemeRoom } from '../../services/themeRoomAPI';
 import { fetchStoriesByThemeRoomId } from "../../services/storyAPI";
+import { ArrowLeft, PlusCircle } from 'lucide-react';
 
-const ThemeRoomStories = () => {
+const ThemeRoomStories: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [themeRoom, setThemeRoom] = useState<ThemeRoom | null>(null);
     const [stories, setStories] = useState<Story[]>([])
@@ -16,103 +17,68 @@ const ThemeRoomStories = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchThemeRoom = async () => {
+        const fetchData = async () => {
+            if (!id) {
+                setError('Theme room ID is undefined');
+                setIsLoading(false);
+                return;
+            }
+
             try {
                 setIsLoading(true);
-                if (!id) {
-                    throw new Error('Theme room ID is undefined');
-                }
-                const response = await getSingleThemeRoom(id);
-                setThemeRoom(response)
+                const [themeRoomResponse, storiesResponse] = await Promise.all([
+                    getSingleThemeRoom(id),
+                    fetchStoriesByThemeRoomId(id)
+                ]);
+                setThemeRoom(themeRoomResponse);
+                setStories(storiesResponse);
             } catch (err) {
-                console.error('Error fetching theme room:', err);
-                setError(err instanceof Error ? err.message : 'An error occurred while fetching the theme room');
+                console.error('Error fetching data:', err);
+                setError(err instanceof Error ? err.message : 'An error occurred while fetching data');
             } finally {
                 setIsLoading(false);
             }
         };
 
-        fetchThemeRoom();
+        fetchData();
     }, [id]);
 
-    useEffect(() => {
-        const fetchStories = async () => {
-            try {
-                setIsLoading(true);
-                if (!id) {
-                    throw new Error('Theme room ID is undefined');
-                }
-                const response = await fetchStoriesByThemeRoomId(id);
-                setStories(response)
-            } catch (err) {
-                setError(err instanceof Error ? err.message : 'An error occurred while fetching the stories')
-            } finally {
-                setIsLoading(false)
-            }
-        }
-        fetchStories();
-    }, [id]);
+    const getCurrentStoryDetails = (story: Story) => {
+        const prevStories = story.prev.map(id => stories.find(s => s._id === id)).filter(Boolean) as Story[];
+        const nextStories = story.next.map(id => stories.find(s => s._id === id)).filter(Boolean) as Story[];
 
-    // Sending story details to the view page
-    // Send the entire story details to the view page. Also, try to find the previous stories and the next stories of the current story if they are already present. If not, send an API call to the database to find only those stories which are not currently present
-
-    // Go through each story id in the array
-    // Find if the story to be searched is present in the stories
-    // If present, add them to its respective array
-    // If not, add the storyId to an array that needs to be searched
-
-    const getCurrentStoryDetails = (storyId: string, story: Story) => {
-        const prevStoryIds = story.prev;
-        const nextStoryIds = story.next;
-        const prevStoriesToFind: string[] = [];
-        const nextStoriesToFind: string[] = [];
-    
-        const prevStories = prevStoryIds.map(id => {
-            const foundStory = stories.find(s => s._id === id);
-            if (!foundStory) {
-                prevStoriesToFind.push(id);
-            }
-            return foundStory;
-        }).filter((story): story is Story => story !== undefined);
-    
-        const nextStories = nextStoryIds.map(id => {
-            const foundStory = stories.find(s => s._id === id);
-            if (!foundStory) {
-                nextStoriesToFind.push(id);
-            }
-            return foundStory;
-        }).filter((story): story is Story => story !== undefined);
-    
         return {
             currentStory: story,
             prevStories,
             nextStories,
-            prevStoriesToFind,
-            nextStoriesToFind,
+            prevStoriesToFind: story.prev.filter(id => !prevStories.some(s => s._id === id)),
+            nextStoriesToFind: story.next.filter(id => !nextStories.some(s => s._id === id)),
             themeRoomId: id
         };
     };
-    
-    const handleStoryClick = async (story: Story) => {
-        const storyDetails = getCurrentStoryDetails(story._id, story);
-    
+
+    const handleStoryClick = (story: Story) => {
+        const storyDetails = getCurrentStoryDetails(story);
         navigate(`/story/${story._id}`, { state: storyDetails });
     };
 
-    if (isLoading) {
-        return <LoadingScreen />;
-    }
+    
 
-    if (error) {
-        return <div>Error: {error}</div>;
-    }
+    const handleCreateStory = () => {
+        // Navigate to story creation page or open a modal
+        navigate(`/create-story`);
+    };
 
-    if (!themeRoom) {
-        return <div>Theme room not found</div>;
-    }
+    if (isLoading) return <LoadingScreen />;
+    if (error) return <div>Error: {error}</div>;
+    if (!themeRoom) return <div>Theme room not found</div>;
 
     return (
         <div className="p-8">
+            <Link to="/home" className="inline-flex items-center text-blue-500 hover:text-blue-600 mb-8">
+                <ArrowLeft size={20} className="mr-2" />
+                Back to Homepage
+            </Link>
             <h1 className="text-3xl font-bold mb-4">{themeRoom.name}</h1>
             <p className="mb-4">{themeRoom.description}</p>
             <div className="mb-4">
@@ -126,21 +92,32 @@ const ThemeRoomStories = () => {
                 </div>
             </div>
 
-            <br />
-            <br />
-            <div className='flex flex-wrap justify-between'>
-                {stories.map(story => (
-                    <div key={story._id} onClick={() => handleStoryClick(story)} className="cursor-pointer p-4 border rounded m-2">
-                        <h2 className="text-xl font-semibold">{story.title}</h2>
-                        <p className="mt-2">{story.content.substring(0, 100)}...</p>
-                        <div className="mt-2">
-                            {story.author.map((user, index) => (
-                                <span key={index} className="mr-2 text-sm text-gray-600">{user}</span>
-                            ))}
+            {stories.length === 0 ? (
+                <div className="text-center mt-8">
+                    <p className="mb-4">No stories yet. Be the first to create one!</p>
+                    <button
+                        onClick={handleCreateStory}
+                        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded inline-flex items-center"
+                    >
+                        <PlusCircle size={20} className="mr-2" />
+                        Create Your First Story
+                    </button>
+                </div>
+            ) : (
+                <div className='flex flex-wrap justify-between mt-8'>
+                    {stories.map(story => (
+                        <div key={story._id} onClick={() => handleStoryClick(story)} className="cursor-pointer p-4 border rounded m-2 w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.33%-1rem)]">
+                            <h2 className="text-xl font-semibold">{story.title}</h2>
+                            <p className="mt-2">{story.content.substring(0, 100)}...</p>
+                            <div className="mt-2">
+                                {story.author.map((user, index) => (
+                                    <span key={index} className="mr-2 text-sm text-gray-600">{user}</span>
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                ))}
-            </div>
+                    ))}
+                </div>
+            )}
         </div>
     );
 }
