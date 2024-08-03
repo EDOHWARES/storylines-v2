@@ -100,7 +100,7 @@ export const editStory = async (req: Request, res: Response): Promise<void> => {
     }
 
     // Create an object with only the fields that are present
-    const updateData: {title?: string, content?: string} = {};
+    const updateData: { title?: string, content?: string } = {};
     if (title !== undefined) updateData.title = title;
     if (content !== undefined) updateData.content = content;
 
@@ -119,6 +119,44 @@ export const editStory = async (req: Request, res: Response): Promise<void> => {
     } else {
       console.error("Error editing story:", error);
       res.status(500).json({ message: "An error occurred while editing the story" });
+    }
+  }
+};
+
+// http://localhost:5000/api/v1/stories/filtered
+export const fetchFilteredStories = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { storyIds } = req.body;
+
+    // Validate input
+    if (!Array.isArray(storyIds) || storyIds.length === 0) {
+      res.status(400).json({ message: "Invalid or empty storyIds array" });
+      return;
+    }
+
+    // Convert string IDs to ObjectIds
+    const currentIds = storyIds.map(id => {
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        throw new Error(`Invalid story ID: ${id}`);
+      }
+      return new mongoose.Types.ObjectId(id);
+    });
+
+    const stories = await storyService.fetchFilteredStories(currentIds);
+
+    // Check if any stories were found
+    if (stories.length === 0) {
+      res.status(404).json({ message: "No stories found for the provided IDs" });
+      return;
+    }
+
+    res.status(200).json(stories);
+  } catch (error) {
+    console.error("Error in fetchFilteredStories:", error);
+    if (error instanceof Error && error.message.startsWith("Invalid story ID:")) {
+      res.status(400).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: "An error occurred while fetching filtered stories", error: error instanceof Error ? error.message : String(error) });
     }
   }
 };

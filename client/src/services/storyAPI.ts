@@ -22,3 +22,10 @@ export const fetchSingleStory = async(id:string) : Promise<Story> => {
   const response = await axios.get<Story>(`${API_URL}/stories/${id}`)
   return response.data
 }
+
+export const fetchFilteredStories = async (storyIds: string[]): Promise<Story[]> => {
+  const response = await axios.get<Story[]>(`${API_URL}/stories/filtered`, {
+    params: { storyIds: storyIds.join(',') }
+  });
+  return response.data;
+};

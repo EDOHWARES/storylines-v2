@@ -53,37 +53,62 @@ const ThemeRoomStories = () => {
         fetchStories();
     }, [id]);
 
-    // const getCurrentStoryDetails = (storyId: string) => {
-    //     const currentStory = stories.find(story => story._id === storyId);
+    // Sending story details to the view page
+    // Send the entire story details to the view page. Also, try to find the previous stories and the next stories of the current story if they are already present. If not, send an API call to the database to find only those stories which are not currently present
+
+    // Go through each story id in the array
+    // Find if the story to be searched is present in the stories
+    // If present, add them to its respective array
+    // If not, add the storyId to an array that needs to be searched
+
+    const getCurrentStoryDetails = (storyId: string, story: Story) => {
+        const prevStoryIds = story.prev;
+        const nextStoryIds = story.next;
+        const prevStoriesToFind: string[] = [];
+        const nextStoriesToFind: string[] = [];
+    
+        const prevStories = prevStoryIds.map(id => {
+            const foundStory = stories.find(s => s._id === id);
+            if (!foundStory) {
+                prevStoriesToFind.push(id);
+            }
+            return foundStory;
+        }).filter((story): story is Story => story !== undefined);
+    
+        const nextStories = nextStoryIds.map(id => {
+            const foundStory = stories.find(s => s._id === id);
+            if (!foundStory) {
+                nextStoriesToFind.push(id);
+            }
+            return foundStory;
+        }).filter((story): story is Story => story !== undefined);
+    
+        return {
+            currentStory: story,
+            prevStories,
+            nextStories,
+            prevStoriesToFind,
+            nextStoriesToFind,
+            id: id
+        };
+    };
+    
+    const handleStoryClick = async (story: Story) => {
+        const storyDetails = getCurrentStoryDetails(story._id, story);
         
-    //     if (!currentStory) {
-    //         console.error('Story not found');
-    //         return null;
-    //     }
-
-    //     const prevStories = currentStory.prev.map(prevId => {
-    //         return stories.find(story => story._id === prevId);
-    //     }).filter((story): story is Story => story !== undefined);
-
-    //     const nextStories = currentStory.next.map(nextId => {
-    //         return stories.find(story => story._id === nextId);
-    //     }).filter((story): story is Story => story !== undefined);
-
-    //     return {
-    //         currentStory,
-    //         prevStories,
-    //         nextStories
-    //     };
-    // }
-
-    // const handleRoomClick = (storyId: string) => {
-    //     const storyDetails = getCurrentStoryDetails(storyId);
-    //     if (storyDetails) {
-    //         navigate(`/story/${storyId}`, { state: storyDetails });
-    //     } else {
-    //         console.error('Unable to navigate: story details not found');
-    //     }
-    // };
+        // If there are stories to find, you might want to fetch them here
+        if (storyDetails.prevStoriesToFind.length > 0 || storyDetails.nextStoriesToFind.length > 0) {
+            // Assuming you have a function to fetch multiple stories by their IDs
+            // const missingStories = await fetchStoriesByIds([...storyDetails.prevStoriesToFind, ...storyDetails.nextStoriesToFind]);
+            // You might want to update your state with these missing stories
+            // setStories(prevStories => [...prevStories, ...missingStories]);
+            
+            // For now, we'll just log this information
+            console.log("Stories to fetch:", [...storyDetails.prevStoriesToFind, ...storyDetails.nextStoriesToFind]);
+        }
+    
+        navigate(`/story/${story._id}`, { state: storyDetails });
+    };
 
     if (isLoading) {
         return <LoadingScreen />;
@@ -114,16 +139,16 @@ const ThemeRoomStories = () => {
 
             <br />
             <br />
-            <div className='flex justify-between'>
+            <div className='flex flex-wrap justify-between'>
                 {stories.map(story => (
-                    <div key={story._id}>
-                        <h1>{story.title}</h1>
-                        <p>{story.content}</p>
-                        {
-                            story.author.map((user, index) => (
-                                <p key={index}>{user}</p>
-                            ))
-                        }
+                    <div key={story._id} onClick={() => handleStoryClick(story)} className="cursor-pointer p-4 border rounded m-2">
+                        <h2 className="text-xl font-semibold">{story.title}</h2>
+                        <p className="mt-2">{story.content.substring(0, 100)}...</p>
+                        <div className="mt-2">
+                            {story.author.map((user, index) => (
+                                <span key={index} className="mr-2 text-sm text-gray-600">{user}</span>
+                            ))}
+                        </div>
                     </div>
                 ))}
             </div>

@@ -106,6 +106,7 @@ export const editStory = async (storyData: Partial<IStory>, id: mongoose.Types.O
 }
 
 // http://localhost:5000/api/v1/stories/filtered
-export const filteredStories = async(storyIds : <String[]>) : Promise<Story[]> => {
-    return;
+export const fetchFilteredStories = async(storyIds : mongoose.Types.ObjectId[]) : Promise<IStory[]> => {
+    const result = await Story.find({'_id' : {$in: storyIds}})
+    return result;
 }
