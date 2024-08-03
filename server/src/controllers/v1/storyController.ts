@@ -127,6 +127,7 @@ export const editStory = async (req: Request, res: Response): Promise<void> => {
 export const fetchFilteredStories = async (req: Request, res: Response): Promise<void> => {
   try {
     const { storyIds } = req.body;
+    console.log(`StoryIds: ${storyIds}`)
 
     // Validate input
     if (!Array.isArray(storyIds) || storyIds.length === 0) {

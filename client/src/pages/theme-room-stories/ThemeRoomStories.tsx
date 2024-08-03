@@ -89,23 +89,12 @@ const ThemeRoomStories = () => {
             nextStories,
             prevStoriesToFind,
             nextStoriesToFind,
-            id: id
+            themeRoomId: id
         };
     };
     
     const handleStoryClick = async (story: Story) => {
         const storyDetails = getCurrentStoryDetails(story._id, story);
-        
-        // If there are stories to find, you might want to fetch them here
-        if (storyDetails.prevStoriesToFind.length > 0 || storyDetails.nextStoriesToFind.length > 0) {
-            // Assuming you have a function to fetch multiple stories by their IDs
-            // const missingStories = await fetchStoriesByIds([...storyDetails.prevStoriesToFind, ...storyDetails.nextStoriesToFind]);
-            // You might want to update your state with these missing stories
-            // setStories(prevStories => [...prevStories, ...missingStories]);
-            
-            // For now, we'll just log this information
-            console.log("Stories to fetch:", [...storyDetails.prevStoriesToFind, ...storyDetails.nextStoriesToFind]);
-        }
     
         navigate(`/story/${story._id}`, { state: storyDetails });
     };

@@ -28,7 +28,9 @@ const StoryDetails = () => {
       setIsLoading(true);
       try {
         const allStoriesToFind = [...prevStoriesToFind, ...nextStoriesToFind];
+        // console.log('Sending storyIds to backend:', allStoriesToFind); // Debug log
         const missingStories = await fetchFilteredStories(allStoriesToFind);
+        // console.log('Received missing stories:', missingStories); // Debug log
         
         const newPrevStories = [
           ...prevStories,
@@ -47,7 +49,8 @@ const StoryDetails = () => {
           nextStoriesToFind: []
         }));
       } catch (err) {
-        setError('Failed to fetch some related stories');
+        // console.error('Error in fetchMissingStories:', err); // Detailed error logging
+        setError("Unable to fetch related stories")
       } finally {
         setIsLoading(false);
       }

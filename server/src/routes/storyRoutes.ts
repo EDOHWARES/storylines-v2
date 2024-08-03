@@ -16,7 +16,7 @@ router.get('/', storyControllerV1.fetchAllStories);
 router.post('/', storyControllerV1.createStory);
 
 // http://localhost:5000/api/v1/stories/filtered
-router.get('/filtered', storyControllerV1.fetchFilteredStories);
+router.post('/filtered', storyControllerV1.fetchFilteredStories);
 
 // http://localhost:5000/api/v1/stories/{storyId}
 router.get('/:storyId', storyControllerV1.fetchSingleStory);

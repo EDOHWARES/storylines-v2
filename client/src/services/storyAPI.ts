@@ -24,8 +24,18 @@ export const fetchSingleStory = async(id:string) : Promise<Story> => {
 }
 
 export const fetchFilteredStories = async (storyIds: string[]): Promise<Story[]> => {
-  const response = await axios.get<Story[]>(`${API_URL}/stories/filtered`, {
-    params: { storyIds: storyIds.join(',') }
-  });
-  return response.data;
+  if (storyIds.length === 0) {
+    console.warn('No story IDs provided to fetchFilteredStories');
+    return [];
+  }
+
+  try {
+    const response = await axios.post<Story[]>(`${API_URL}/stories/filtered`, {
+      storyIds,
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching filtered stories:', error);
+    throw error;
+  }
 };
