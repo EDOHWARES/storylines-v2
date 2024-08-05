@@ -11,7 +11,7 @@ import LandingPage from './pages/landing-page/LandingPage';
 
 const App: React.FC = () => {
   return (
-    <div className="App font-sans">
+    <div className="App">
       <Routes>
         <Route path='/' element={<LandingPage />} />
         <Route path="/home" element={<Home />} />

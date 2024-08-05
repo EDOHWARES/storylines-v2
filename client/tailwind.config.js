@@ -1,12 +1,11 @@
 /** @type {import('tailwindcss').Config} */
-export default {
+module.exports = {
   darkMode: ["class"],
   content: [
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
+    './src/**/*.{ts,tsx}',
   ],
   prefix: "",
   theme: {
@@ -18,9 +17,6 @@ export default {
       },
     },
     extend: {
-      fontFamily: {
-        sans: ['"Balsamiq Sans"', 'sans-serif'],
-      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -55,6 +51,16 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        custom: {
+          yellow: "hsl(var(--yellow))",
+          blue: "hsl(var(--blue))",
+          green: "hsl(var(--green))",
+          "dark-blue": "hsl(var(--dark-blue))",
+          purple: "hsl(var(--purple))",
+          "dark-beige": "hsl(var(--dark-beige))",
+          orange: "hsl(var(--orange))",
+          pink: "hsl(var(--pink))",
+        }
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -70,10 +76,20 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        marquee: {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(calc(-100% - var(--gap)))" },
+        },
+        "marquee-vertical": {
+          from: { transform: "translateY(0)" },
+          to: { transform: "translateY(calc(-100% - var(--gap)))" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        marquee: "marquee var(--duration) linear infinite",
+        "marquee-vertical": "marquee-vertical var(--duration) linear infinite",
       },
     },
   },
