@@ -1,9 +1,48 @@
-@import url('https://fonts.googleapis.com/css2?family=Balsamiq+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --white: 33 36% 95%;
+  --black: 0 0% 0%;
+  --yellow: 45 100% 70%;
+  --blue: 203 71% 63%;
+  --green: 158 74% 58%;
+  --dark-blue: 220 29% 15%;
+  --purple: 268 62% 55%;
+  --dark-beige: 25 56% 91%;
+  --orange: 18 70% 51%;
+
+  --background: var(--white);
+  --foreground: var(--black);
+  --text: 240 5% 10%;
+  --primary: var(--yellow);
+  --secondary: var(--blue);
+  --tertiary: var(--green);
+  --accent1: var(--purple);
+  --accent2: var(--dark-beige);
+  --accent3: var(--orange);
+}
+
+.dark-theme {
+  --background: var(--dark-blue);
+  --foreground: var(--white);
+  --text: 0 0% 100%;
+}
+
+.primary-btn{
+  background-color: var(--yellow);
+}
+
+body {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  background-color: hsl(var(--background));
+  color: hsl(var(--text));
+}
 
 .react-flow__panel {
   transform: translateX(120%);
