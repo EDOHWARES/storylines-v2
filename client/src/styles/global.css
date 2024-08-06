@@ -4,8 +4,8 @@
 
 @layer base {
   :root {
-    --background: 33 36% 95%;
-    --foreground: 240 7% 12%;
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
@@ -29,19 +29,11 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-    --yellow: 45 100% 70%;
-    --blue: 203 71% 63%;
-    --green: 153 100% 28%;
-    --dark-blue: 220 29% 15%;
-    --purple: 268 62% 55%;
-    --dark-beige: 25 56% 91%;
-    --orange: 18 70% 51%;
-    --pink: 294 93% 73%
   }
 
   .dark {
-    --background: 240 7% 12%;
-    --foreground: 33 36% 95%;
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
     --popover: 222.2 84% 4.9%;
@@ -64,14 +56,6 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
-    --yellow: 45 100% 70%;
-    --blue: 203 71% 63%;
-    --green: 153 100% 28%;
-    --dark-blue: 220 29% 15%;
-    --purple: 268 62% 55%;
-    --dark-beige: 25 56% 91%;
-    --orange: 18 70% 51%;
-    --pink: 294 93% 73%
   }
 }
 
@@ -79,22 +63,7 @@
   * {
     @apply border-border;
   }
-
   body {
     @apply bg-background text-foreground;
-  }
-}
-
-@layer components {
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  Link,
-  a {
-    font-weight: 600;
   }
 }
