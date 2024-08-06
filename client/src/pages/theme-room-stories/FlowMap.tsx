@@ -1,4 +1,3 @@
-"use client";
 import React, { useState, useEffect } from 'react';
 import {
     ReactFlow,
@@ -10,6 +9,7 @@ import {
     Edge,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
+import LoadingScreen from '../../components/layout/LoadingScreen';
 
 interface Story {
     _id: string;
@@ -27,15 +27,14 @@ const FlowMap: React.FC<FlowMapProps> = ({ stories }) => {
     const [screenSize, setScreenSize] = useState({ width: 0, height: 0 });
     const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => {
         const updateScreenSize = () => {
             setScreenSize({ width: window.innerWidth, height: window.innerHeight });
         };
-
         updateScreenSize();
         window.addEventListener('resize', updateScreenSize);
-
         return () => window.removeEventListener('resize', updateScreenSize);
     }, []);
 
@@ -43,71 +42,87 @@ const FlowMap: React.FC<FlowMapProps> = ({ stories }) => {
         const newNodes: Node[] = [];
         const newEdges: Edge[] = [];
         const rootNode = stories.find(story => story.type === "root");
-
         if (!rootNode) return;
 
         const nodeMap = new Map<string, Node>();
+        const levelWidth: { [key: number]: number } = {};
+        const nodeWidth = 150;
+        const nodeHeight = 40;
+        const verticalSpacing = 100;
 
         const createNode = (story: Story, depth: number, index: number): Node => {
-            const nodeWidth = 150;
-            const nodeHeight = 40;
-            const horizontalSpacing = 200;
-            const verticalSpacing = 100;
-
+            const horizontalSpacing = screenSize.width / (levelWidth[depth] + 1);
             return {
                 id: story._id,
                 position: {
-                    x: depth * horizontalSpacing,
-                    y: index * verticalSpacing
+                    x: (index + 1) * horizontalSpacing - nodeWidth / 2,
+                    y: depth * verticalSpacing
                 },
                 data: { label: story.title },
                 style: { width: nodeWidth, height: nodeHeight }
             };
         };
 
-        const processNode = (story: Story, depth: number, index: number) => {
-            if (nodeMap.has(story._id)) return;
+        const processLevel = (levelNodes: Story[], depth: number) => {
+            const nextLevelNodes: Story[] = [];
+            levelWidth[depth] = levelNodes.length;
 
-            const node = createNode(story, depth, index);
-            newNodes.push(node);
-            nodeMap.set(story._id, node);
+            levelNodes.forEach((story, index) => {
+                if (nodeMap.has(story._id)) return;
 
-            story.next.forEach((nextId, i) => {
-                const nextStory = stories.find(s => s._id === nextId);
-                if (nextStory) {
-                    processNode(nextStory, depth + 1, index + i);
-                    newEdges.push({
-                        id: `e${story._id}-${nextId}`,
-                        source: story._id,
-                        target: nextId
-                    });
-                }
+                const node = createNode(story, depth, index);
+                newNodes.push(node);
+                nodeMap.set(story._id, node);
+
+                story.next.forEach(nextId => {
+                    const nextStory = stories.find(s => s._id === nextId);
+                    if (nextStory) {
+                        nextLevelNodes.push(nextStory);
+                        newEdges.push({
+                            id: `e${story._id}-${nextId}`,
+                            source: story._id,
+                            target: nextId
+                        });
+                    }
+                });
             });
+
+            if (nextLevelNodes.length > 0) {
+                processLevel(nextLevelNodes, depth + 1);
+            }
         };
 
-        processNode(rootNode, screenSize.width / 2, screenSize.height / 4);
+        processLevel([rootNode], 0);
 
         setNodes(newNodes);
         setEdges(newEdges);
     };
 
-    console.log(`Width: ${screenSize.width/2}`);
-    console.log(`Height: ${screenSize.height/4}`)
-
     useEffect(() => {
-        const updateScreenSize = () => {
-            setScreenSize({ width: window.innerWidth, height: window.innerHeight });
+        const setupFlowMap = async () => {
+            setIsLoading(true);
+            constructNodesAndEdges();
+
+            const clickFitViewButton = () => {
+                const fitViewButton = document.querySelector('.react-flow__controls-fitview') as HTMLButtonElement;
+                if (fitViewButton) {
+                    fitViewButton.click();
+                }
+            };
+
+            // Wait for the next frame to ensure the DOM has updated
+            await new Promise(resolve => requestAnimationFrame(resolve));
+
+            clickFitViewButton();
+            setIsLoading(false);
         };
 
-        updateScreenSize();
-        window.addEventListener('resize', updateScreenSize);
-
-        return () => window.removeEventListener('resize', updateScreenSize);
-    }, []);
-
-    useEffect(() => {
-        constructNodesAndEdges();
+        setupFlowMap();
     }, [stories, screenSize]);
+
+    if (isLoading) {
+        return <LoadingScreen />;
+    }
 
     return (
         <div style={{width: `${screenSize.width}px`, height: `${screenSize.height}px`}}>
