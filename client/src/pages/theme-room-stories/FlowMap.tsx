@@ -7,17 +7,27 @@ import {
     useEdgesState,
     Node,
     Edge,
+    Position,
+    Handle
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import LoadingScreen from '../../components/layout/LoadingScreen';
+import { Story } from "../../types/Story";
+import StoryNode from './StoryNode';
 
-interface Story {
-    _id: string;
-    title: string;
-    type: string;
-    content: string;
-    next: string[];
-}
+const CustomStoryNode: React.FC<{ data: Story }> = ({ data }) => {
+    return (
+        <>
+            <Handle type="target" position={Position.Top} className="w-3 h-3" />
+            <StoryNode data={data} />
+            <Handle type="source" position={Position.Bottom} className="w-3 h-3" />
+        </>
+    );
+};
+
+const nodeTypes = {
+    custom: CustomStoryNode,
+};
 
 interface FlowMapProps {
     stories: Story[];
@@ -44,30 +54,42 @@ const FlowMap: React.FC<FlowMapProps> = ({ stories }) => {
         const rootNode = stories.find(story => story.type === "root");
         if (!rootNode) return;
 
+        // Width: 1621
+        // Height: 476
+
         const nodeMap = new Map<string, Node>();
-        const levelWidth: { [key: number]: number } = {};
-        const nodeWidth = 150;
-        const nodeHeight = 40;
-        const verticalSpacing = 100;
+        const levelNodes: { [key: number]: Story[] } = {};
+        const nodeWidth = 250;
+        const nodeHeight = 200;
+        const verticalSpacing = 400;
+        const horizontalSpacing = 400; // Fixed horizontal spacing
 
         const createNode = (story: Story, depth: number, index: number): Node => {
-            const horizontalSpacing = screenSize.width / (levelWidth[depth] + 1);
+            const totalWidth = (levelNodes[depth].length - 1) * horizontalSpacing;
+            const startX = -totalWidth / 2;
             return {
                 id: story._id,
                 position: {
-                    x: (index + 1) * horizontalSpacing - nodeWidth / 2,
+                    x: startX + index * horizontalSpacing,
                     y: depth * verticalSpacing
                 },
-                data: { label: story.title },
-                style: { width: nodeWidth, height: nodeHeight }
+                data: {
+                    label: story._id,
+                    title: story.title,
+                    content: story.content,
+                    author: story.author,
+                    themeRoomId: story.themeRoomId
+                },
+                style: { width: nodeWidth, height: nodeHeight },
+                type: "custom"
             };
         };
 
-        const processLevel = (levelNodes: Story[], depth: number) => {
+        const processLevel = (currentLevelNodes: Story[], depth: number) => {
+            levelNodes[depth] = currentLevelNodes;
             const nextLevelNodes: Story[] = [];
-            levelWidth[depth] = levelNodes.length;
 
-            levelNodes.forEach((story, index) => {
+            currentLevelNodes.forEach((story, index) => {
                 if (nodeMap.has(story._id)) return;
 
                 const node = createNode(story, depth, index);
@@ -96,6 +118,9 @@ const FlowMap: React.FC<FlowMapProps> = ({ stories }) => {
 
         setNodes(newNodes);
         setEdges(newEdges);
+
+        console.log(`Width: ${screenSize.width} | Height: ${screenSize.height}`)
+
     };
 
     useEffect(() => {
@@ -110,7 +135,6 @@ const FlowMap: React.FC<FlowMapProps> = ({ stories }) => {
                 }
             };
 
-            // Wait for the next frame to ensure the DOM has updated
             await new Promise(resolve => requestAnimationFrame(resolve));
 
             clickFitViewButton();
@@ -125,13 +149,14 @@ const FlowMap: React.FC<FlowMapProps> = ({ stories }) => {
     }
 
     return (
-        <div style={{width: `${screenSize.width}px`, height: `${screenSize.height}px`}}>
+        <div style={{ width: `${screenSize.width}px`, height: `${screenSize.height}px` }}>
             <ReactFlow
                 nodes={nodes}
                 edges={edges}
                 onNodesChange={onNodesChange}
                 onEdgesChange={onEdgesChange}
                 fitView
+                nodeTypes={nodeTypes}
             >
                 <Controls />
                 <Background gap={12} size={1} />
