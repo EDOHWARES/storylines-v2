@@ -78,7 +78,9 @@ const FlowMap: React.FC<FlowMapProps> = ({ stories }) => {
                     title: story.title,
                     content: story.content,
                     author: story.author,
-                    themeRoomId: story.themeRoomId
+                    themeRoomId: story.themeRoomId,
+                    prev: story.prev,
+                    next: story.next
                 },
                 style: { width: nodeWidth, height: nodeHeight },
                 type: "custom"
@@ -118,8 +120,6 @@ const FlowMap: React.FC<FlowMapProps> = ({ stories }) => {
 
         setNodes(newNodes);
         setEdges(newEdges);
-
-        console.log(`Width: ${screenSize.width} | Height: ${screenSize.height}`)
 
     };
 

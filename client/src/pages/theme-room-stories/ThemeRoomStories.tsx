@@ -85,7 +85,7 @@ const ThemeRoomStories: React.FC = () => {
                     </button>
                 </div>
             ) : (
-                <FlowMap stories={stories} onStoryClick={handleStoryClick} />
+                <FlowMap stories={stories} />
             )}
         </div>
     );

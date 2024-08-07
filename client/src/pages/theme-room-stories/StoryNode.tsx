@@ -1,29 +1,39 @@
 import React from 'react';
+import { ChevronRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Story } from '../../types/Story';
 
-const StoryNode = ({ data }) => {
-    return (
-        <div>
-            <div className="p-4 shadow-md rounded-md bg-white border-2 border-gray-200">
-
-
-                <div className="font-bold text-lg mb-2">{data.title}</div>
-
-                <div className="text-sm mb-1">
-                    <span className="font-semibold">Authors:</span> {data.author.join(', ')}
-                </div>
-
-                <div className="text-sm mb-1">
-                    <span className="font-semibold">Theme Room:</span> {data.themeRoomId}
-                </div>
-
-                <div className="text-sm mb-2">
-                    <span className="font-semibold">Content:</span>
-                    <p className="italic">{data.content.substring(0, 50)}...</p>
-                </div>
-
-            </div>
-        </div>
-    )
+interface StoryNodeProps {
+    data: Story;
 }
 
-export default StoryNode
+const StoryNode: React.FC<StoryNodeProps> = ({ data }) => {
+    console.log(JSON.stringify(data));
+    const navigate = useNavigate();
+
+    
+    const handleStoryClick = () => {
+        navigate(`/story`, { state: data });
+    };
+
+    return (
+        <div className="rounded-lg overflow-hidden shadow-lg bg-white hover:shadow-xl transition-shadow duration-300 ease-in-out">
+            <div className="p-6">
+                <h2 className="font-bold text-xl mb-2 text-gray-800">{data.title}</h2>
+                <p className="text-gray-600 text-sm mb-4">{data.content.substring(0, 100)}...</p>
+                <div className="flex items-center text-sm text-gray-500 mb-4">
+                    <span>Theme room id: {data.themeRoomId}</span>
+                </div>
+                <button
+                    onClick={handleStoryClick}
+                    className="flex items-center text-blue-500 hover:text-blue-600 transition-colors duration-300 ease-in-out"
+                >
+                    Read more
+                    <ChevronRight className="ml-1 w-4 h-4" />
+                </button>
+            </div>
+        </div>
+    );
+};
+
+export default StoryNode;
