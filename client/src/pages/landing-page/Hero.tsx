@@ -3,8 +3,12 @@ import { IconArrowRight } from '@tabler/icons-react';
 import AnimatedShinyText from '../../components/magicui/animated-shiny-text';
 import { cn } from '../../lib/utils';
 import { Button } from '../../components/ui/button';
+import {useNavigate} from "react-router-dom"
 
 const Hero = () => {
+
+    const navigate = useNavigate();
+
     return (
         <div className="min-h-screen flex items-center justify-center text-foreground">
             <div className="container mx-auto px-4">
@@ -30,7 +34,7 @@ const Hero = () => {
                         Dive into a world where every reader is a writer, and every story branches into endless possibilities. 
                     </p>
                     <div className="space-x-4">
-                        <Button variant="default">Start Writing</Button>
+                        <Button variant="default" onClick={() => navigate('/home')}>Start Writing</Button>
                         <Button variant="secondary">Explore Stories</Button>
                     </div>
                 </div>

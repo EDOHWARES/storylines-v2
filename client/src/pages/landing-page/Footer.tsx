@@ -2,7 +2,7 @@ import React from 'react'
 
 const Footer = () => {
   return (
-    <footer className="border-t py-12 ">
+    <footer className="border-t py-12 bg-background">
       <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
         <div className="mb-8 md:mb-0">
           <h2 className="text-2xl font-bold">StoryLines</h2>
