@@ -1,12 +1,12 @@
 import React from 'react';
-import { IconArrowRight, IconChevronRight } from '@tabler/icons-react';
+import { IconArrowRight } from '@tabler/icons-react';
 import AnimatedShinyText from '../../components/magicui/animated-shiny-text';
 import { cn } from '../../lib/utils';
 import { Button } from '../../components/ui/button';
 
 const Hero = () => {
     return (
-        <div className="min-h-screen flex items-center justify-center bg-background text-foreground">
+        <div className="min-h-screen flex items-center justify-center text-foreground">
             <div className="container mx-auto px-4">
                 <div className="text-center">
                     <div className="animated-text-btn">
@@ -23,11 +23,11 @@ const Hero = () => {
                             </div>
                         </div>
                     </div>
-                    <h1 className="text-5xl font-bold mb-4 text-primary">
-                        Craft Your Infinite Story
+                    <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold text-foreground mb-4">
+                        Craft Your <span className='text-accent'>Infinite</span> Story
                     </h1>
-                    <p className="text-xl mb-8 text-muted-foreground max-w-2xl mx-auto">
-                        Dive into a world where every reader is a writer, and every story branches into endless possibilities. Connect, create, and explore narratives that evolve with each contribution.
+                    <p className="text-lg sm:text-xl text-muted-foreground mb-8">
+                        Dive into a world where every reader is a writer, and every story branches into endless possibilities. 
                     </p>
                     <div className="space-x-4">
                         <Button variant="default">Start Writing</Button>

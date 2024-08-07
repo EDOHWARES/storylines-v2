@@ -19,7 +19,7 @@ const NavBar: React.FC = () => {
   ];
 
   return (
-    <nav className="w-full transition-all duration-300 border-b border-border/40 backdrop-blur-xl">
+    <nav className="w-full fixed z-50 transition-all duration-300 border-b border-border/40 backdrop-blur-xl">
       <div className="mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
           <div className="flex items-center">

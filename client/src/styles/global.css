@@ -1,9 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -18,21 +16,20 @@
     --secondary-foreground: 0 0% 0%;
     --muted: 0 0% 96%;
     --muted-foreground: 0 0% 45%;
-    --accent: 0 0% 96%;
+    --accent: 25 100% 50%;
     --accent-foreground: 0 0% 0%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
     --border: 0 0% 89%;
     --input: 0 0% 89%;
-    --ring: 0 0% 0%;
+    --ring: 25 100% 50%;
     --radius: 0.5rem;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
+    --chart-1: 25 100% 60%;
+    --chart-2: 25 100% 50%;
+    --chart-3: 25 100% 40%;
+    --chart-4: 25 100% 30%;
+    --chart-5: 25 100% 20%;
   }
-
   .dark {
     --background: 0 0% 0%;
     --foreground: 0 0% 98%;
@@ -46,31 +43,28 @@
     --secondary-foreground: 0 0% 98%;
     --muted: 0 0% 15%;
     --muted-foreground: 0 0% 65%;
-    --accent: 0 0% 15%;
+    --accent: 25 100% 50%;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 63% 31%;
     --destructive-foreground: 0 0% 98%;
     --border: 0 0% 20%;
     --input: 0 0% 20%;
-    --ring: 0 0% 83%;
-    --chart-1: 0 70% 50%;
-    --chart-2: 120 60% 45%;
-    --chart-3: 60 80% 55%;
-    --chart-4: 300 65% 60%;
-    --chart-5: 30 75% 55%;
+    --ring: 25 100% 50%;
+    --chart-1: 25 100% 60%;
+    --chart-2: 25 100% 50%;
+    --chart-3: 25 100% 40%;
+    --chart-4: 25 100% 30%;
+    --chart-5: 25 100% 20%;
   }
 }
-
 body {
   font-family: "Plus Jakarta Sans", sans-serif;
   letter-spacing: -0.5px
 }
-
 @layer base {
   * {
     @apply border-border;
   }
-
   body {
     @apply bg-background text-foreground;
   }
