@@ -41,7 +41,7 @@ const Home = () => {
   );
 
   const handleRoomClick = (roomId: string) => {
-    navigate(`/room/${roomId}`);
+    navigate(`/story-map/${roomId}`);
   };
 
   return (

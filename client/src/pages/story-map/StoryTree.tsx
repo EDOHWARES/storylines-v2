@@ -18,9 +18,9 @@ import StoryNode from './StoryNode';
 const CustomStoryNode: React.FC<{ data: Story }> = ({ data }) => {
     return (
         <>
-            <Handle type="target" position={Position.Top} className="w-3 h-3" />
+            <Handle type="target" position={Position.Top} className="!bg-transparent border-none" />
             <StoryNode data={data} />
-            <Handle type="source" position={Position.Bottom} className="w-3 h-3" />
+            <Handle type="source" position={Position.Bottom} className="!bg-transparent border-none" />
         </>
     );
 };
@@ -29,11 +29,11 @@ const nodeTypes = {
     custom: CustomStoryNode,
 };
 
-interface FlowMapProps {
+interface StoryTreeProps {
     stories: Story[];
 }
 
-const FlowMap: React.FC<FlowMapProps> = ({ stories }) => {
+const StoryTree: React.FC<StoryTreeProps> = ({ stories }) => {
     const [screenSize, setScreenSize] = useState({ width: 0, height: 0 });
     const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
@@ -124,7 +124,7 @@ const FlowMap: React.FC<FlowMapProps> = ({ stories }) => {
     };
 
     useEffect(() => {
-        const setupFlowMap = async () => {
+        const setupStoryTree = async () => {
             setIsLoading(true);
             constructNodesAndEdges();
 
@@ -141,7 +141,7 @@ const FlowMap: React.FC<FlowMapProps> = ({ stories }) => {
             setIsLoading(false);
         };
 
-        setupFlowMap();
+        setupStoryTree();
     }, [stories, screenSize]);
 
     if (isLoading) {
@@ -165,4 +165,4 @@ const FlowMap: React.FC<FlowMapProps> = ({ stories }) => {
     );
 };
 
-export default FlowMap;
+export default StoryTree;

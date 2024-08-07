@@ -4,7 +4,7 @@ import Home from './pages/home-page/Home';
 import Favorites from './pages/Favorites';
 import Settings from './pages/Settings';
 import Help from './pages/Help';
-import ThemeRoomStories from './pages/theme-room-stories/ThemeRoomStories';
+import StoryMap from './pages/story-map/StoryMap';
 import CreateStory from './pages/create-story/CreateStory';
 import LandingPage from './pages/landing-page/LandingPage';
 import DisplayStory from './pages/story/DisplayStory';
@@ -18,7 +18,7 @@ const App: React.FC = () => {
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/help" element={<Help />} />
-        <Route path="/room/:id" element={<ThemeRoomStories />} />
+        <Route path="/story-map/:id" element={<StoryMap />} />
         <Route path="story" element={<DisplayStory />} />
         <Route path="/create-story" element={<CreateStory />} />
       </Routes>

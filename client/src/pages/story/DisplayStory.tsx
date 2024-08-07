@@ -59,7 +59,7 @@ const DisplayStory: React.FC = () => {
         <div className="max-w-2xl mx-auto mt-8 p-6 bg-white rounded-lg shadow-lg">
 
             <div className="back-to-theme-room">
-                <Link to={`/room/${story.themeRoomId}`}>
+                <Link to={`/story-map/${story.themeRoomId}`}>
                 <p>Go back to theme room</p>
                 </Link>
             </div>

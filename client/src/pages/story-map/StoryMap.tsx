@@ -1,15 +1,15 @@
 "use client";
 import React, { useState, useEffect } from 'react'
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate} from 'react-router-dom';
 import LoadingScreen from '../../components/layout/LoadingScreen';
 import { ThemeRoom } from '../../types/ThemeRoom';
 import { Story } from "../../types/Story"
 import { getSingleThemeRoom } from '../../services/themeRoomAPI';
 import { fetchStoriesByThemeRoomId } from "../../services/storyAPI";
-import { ArrowLeft, PlusCircle } from 'lucide-react';
-import FlowMap from './FlowMap';
+import { PlusCircle } from 'lucide-react';
+import StoryTree from './StoryTree';
 
-const ThemeRoomStories: React.FC = () => {
+const StoryMap: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [themeRoom, setThemeRoom] = useState<ThemeRoom | null>(null);
     const [stories, setStories] = useState<Story[]>([])
@@ -44,24 +44,6 @@ const ThemeRoomStories: React.FC = () => {
         fetchData();
     }, [id]);
 
-    const getCurrentStoryDetails = (story: Story) => {
-        const prevStories = story.prev.map(id => stories.find(s => s._id === id)).filter(Boolean) as Story[];
-        const nextStories = story.next.map(id => stories.find(s => s._id === id)).filter(Boolean) as Story[];
-
-        return {
-            currentStory: story,
-            prevStories,
-            nextStories,
-            prevStoriesToFind: story.prev.filter(id => !prevStories.some(s => s._id === id)),
-            nextStoriesToFind: story.next.filter(id => !nextStories.some(s => s._id === id)),
-            themeRoomId: id
-        };
-    };
-
-    const handleStoryClick = (story: Story) => {
-        const storyDetails = getCurrentStoryDetails(story);
-        navigate(`/story/${story._id}`, { state: storyDetails });
-    };
 
     const handleCreateStory = () => {
         navigate(`/create-story`);
@@ -85,10 +67,10 @@ const ThemeRoomStories: React.FC = () => {
                     </button>
                 </div>
             ) : (
-                <FlowMap stories={stories} />
+                <StoryTree stories={stories} />
             )}
         </div>
     );
 }
 
-export default ThemeRoomStories;
+export default StoryMap;
