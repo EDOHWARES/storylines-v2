@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { Story } from '../../types/Story';
 import LoadingScreen from '../../components/layout/LoadingScreen';
 import { fetchFilteredStories } from '../../services/storyAPI';
@@ -57,6 +57,13 @@ const DisplayStory: React.FC = () => {
 
     return (
         <div className="max-w-2xl mx-auto mt-8 p-6 bg-white rounded-lg shadow-lg">
+
+            <div className="back-to-theme-room">
+                <Link to={`/room/${story.themeRoomId}`}>
+                <p>Go back to theme room</p>
+                </Link>
+            </div>
+
             <h1 className="text-3xl font-bold mb-4">{story.title}</h1>
             <div className="mb-4">
                 <span className="font-semibold">Authors:</span> {story.author.join(', ')}
@@ -75,7 +82,7 @@ const DisplayStory: React.FC = () => {
                     <ul className="list-disc pl-5">
                         {prevStories.map((prevStory) => (
                             <li key={prevStory._id}>
-                                <button 
+                                <button
                                     onClick={() => handleStoryClick(prevStory)}
                                     className="text-blue-500 hover:underline cursor-pointer"
                                 >
@@ -93,7 +100,7 @@ const DisplayStory: React.FC = () => {
                     <ul className="list-disc pl-5">
                         {nextStories.map((nextStory) => (
                             <li key={nextStory._id}>
-                                <button 
+                                <button
                                     onClick={() => handleStoryClick(nextStory)}
                                     className="text-blue-500 hover:underline cursor-pointer"
                                 >
