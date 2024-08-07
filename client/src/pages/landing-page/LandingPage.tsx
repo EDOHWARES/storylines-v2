@@ -1,8 +1,17 @@
-import React from 'react'
+import React from 'react';
+import NavBar from '../../components/layout/NavBar';
+import Hero from './Hero';
 
 const LandingPage = () => {
   return (
-    <div>LandingPage</div>
+    <main>
+      <section className="nav-bar">
+        <NavBar />
+      </section>
+      <section>
+        <Hero />
+      </section>
+    </main>
   )
 }
 

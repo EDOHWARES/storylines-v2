@@ -22,7 +22,7 @@ const LoadingScreen: React.FC = () => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-background z-[10001]">
       <WordRotate
-        className="text-4xl font-bold text-black dark:text-white"
+        className="text-4xl font-bold text-foreground bg-background"
         words={shuffledWords}
       />
     </div>
