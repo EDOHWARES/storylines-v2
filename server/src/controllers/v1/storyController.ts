@@ -27,6 +27,7 @@ export const fetchSingleStory = async (req: Request, res: Response): Promise<voi
 // http://localhost:5000/api/v1/stories
 export const createStory = async (req: Request, res: Response): Promise<void> => {
   try {
+    console.log(`Story controller req:body: ${req.body}`)
     const { title, type, content, author, themeRoomId, prev } = req.body;
     const story = await storyService.createStory({
       title,

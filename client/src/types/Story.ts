@@ -7,5 +7,7 @@ export interface Story {
     themeRoomId: string;
     prev: string[];
     next: string[];
+    createdAt: string;
+    updatedAt: string;
   }
   

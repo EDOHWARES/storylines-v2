@@ -15,6 +15,7 @@ export const createStory = async (story: Partial<Story>): Promise<Story> => {
 
 export const fetchStoriesByThemeRoomId = async(id: string) : Promise<Story[]> => {
   const response = await axios.get<Story[]>(`${API_URL}/stories/theme-rooms/${id}`)
+  // console.log(`Axios data: ${JSON.stringify(response.data)}`)
   return response.data
 }
 

@@ -6,9 +6,7 @@ import {
     useNodesState,
     useEdgesState,
     Node,
-    Edge,
-    Position,
-    Handle
+    Edge
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import LoadingScreen from '../../components/layout/LoadingScreen';
@@ -17,12 +15,9 @@ import StoryNode from './StoryNode';
 
 const CustomStoryNode: React.FC<{ data: Story }> = ({ data }) => {
     return (
-        <>
-            <Handle type="target" position={Position.Top} className="!bg-transparent border-none" />
-            <StoryNode data={data} />
-            <Handle type="source" position={Position.Bottom} className="!bg-transparent border-none" />
-        </>
-    );
+        <StoryNode data={data} />
+    )
+
 };
 
 const nodeTypes = {
@@ -34,6 +29,7 @@ interface StoryTreeProps {
 }
 
 const StoryTree: React.FC<StoryTreeProps> = ({ stories }) => {
+
     const [screenSize, setScreenSize] = useState({ width: 0, height: 0 });
     const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
@@ -54,15 +50,12 @@ const StoryTree: React.FC<StoryTreeProps> = ({ stories }) => {
         const rootNode = stories.find(story => story.type === "root");
         if (!rootNode) return;
 
-        // Width: 1621
-        // Height: 476
-
         const nodeMap = new Map<string, Node>();
         const levelNodes: { [key: number]: Story[] } = {};
         const nodeWidth = 250;
         const nodeHeight = 200;
         const verticalSpacing = 400;
-        const horizontalSpacing = 400; // Fixed horizontal spacing
+        const horizontalSpacing = 400;
 
         const createNode = (story: Story, depth: number, index: number): Node => {
             const totalWidth = (levelNodes[depth].length - 1) * horizontalSpacing;
@@ -75,12 +68,15 @@ const StoryTree: React.FC<StoryTreeProps> = ({ stories }) => {
                 },
                 data: {
                     label: story._id,
+                    _id: story._id,
                     title: story.title,
                     content: story.content,
                     author: story.author,
                     themeRoomId: story.themeRoomId,
                     prev: story.prev,
-                    next: story.next
+                    next: story.next,
+                    createdAt: story.createdAt,
+                    updatedAt: story.updatedAt,
                 },
                 style: { width: nodeWidth, height: nodeHeight },
                 type: "custom"
