@@ -63,7 +63,7 @@ const ReviewCard = ({
 
 const StoryShowcase = () => {
     return (
-        <div className="min-h-screen flex items-center justify-center text-foreground ">
+        <div className="min-h-screen flex flex-col items-center justify-center text-foreground ">
             <div className="">
                 <div className="text-center">
                     <div>

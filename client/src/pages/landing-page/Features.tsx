@@ -11,7 +11,7 @@ const features = [
         href: "/",
         cta: "Learn more",
         background: <img src={writeBranchImage} className="absolute -top-50 mt-5" alt="Write & Branch" />,
-        className: "md:col-span-2 md:row-span-2",
+        className: "lg:row-start-1 lg:row-end-4 lg:col-start-2 lg:col-end-3",
     },
     {
         Icon: IconSearch,
@@ -20,7 +20,7 @@ const features = [
         href: "/",
         cta: "Learn more",
         background: <img src={exploreImage} className="absolute -top-20 mt-5" alt="Explore Stories" />,
-        className: "md:col-span-1 md:row-span-1",
+        className: "lg:col-start-1 lg:col-end-2 lg:row-start-1 lg:row-end-3",
     },
     {
         Icon: IconRoad,
@@ -29,7 +29,7 @@ const features = [
         href: "/",
         cta: "Learn more",
         background: <img src={choosePathImage} className="absolute -top-20" alt="Choose Your Path" />,
-        className: "md:col-span-1 md:row-span-1",
+        className: "lg:col-start-1 lg:col-end-2 lg:row-start-3 lg:row-end-4",
     },
     {
         Icon: IconUsers,
@@ -38,7 +38,7 @@ const features = [
         href: "/",
         cta: "Learn more",
         background: <img src={collaborateImage} className="absolute -top-20" alt="Collaborate" />,
-        className: "md:col-span-1 md:row-span-1",
+        className: "lg:col-start-3 lg:col-end-3 lg:row-start-1 lg:row-end-2",
     },
     {
         Icon: IconBulb,
@@ -47,7 +47,7 @@ const features = [
         href: "/",
         cta: "Learn more",
         background: <img src={inspiredImage} className="absolute -top-20" alt="Get Inspired" />,
-        className: "md:col-span-1 md:row-span-1",
+        className: "lg:col-start-3 lg:col-end-3 lg:row-start-2 lg:row-end-4",
     },
 ];
 
@@ -60,7 +60,7 @@ import inspiredImage from '../../assets/images/landing-page/inspired.svg';
 
 const Features = () => {
     return (
-        <div className="min-h-screen flex flex-col justify-center px-4 sm:px-6 lg:px-8 pt-16 sm:pt-24">
+        <div className="min-h-screen flex flex-col justify-center px-4 sm:px-6 lg:px-8 pt-16 sm:pt-24 mb-8">
             <div className="max-w-7xl mx-auto w-full">
                 <div className="text-center mb-12">
 
@@ -74,7 +74,7 @@ const Features = () => {
                 </div>
 
                 <div className="mt-16">
-                    <BentoGrid className="grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <BentoGrid className="lg:grid-rows-3">
                         {features.map((feature) => (
                             <BentoCard key={feature.name} {...feature} />
                         ))}
