@@ -80,7 +80,7 @@ const Header = () => (
   </div>
 );
 
-const SearchAndFilterBar = ({ searchTerm, setSearchTerm, sortBy, setSortBy, layoutView, toggleLayout }) => (
+const SearchAndFilterBar = ({ searchTerm, setSearchTerm, layoutView, toggleLayout }) => (
   <div className="flex flex-col md:flex-row items-start md:items-center justify-between p-2 bg-background space-y-4 md:space-y-0 md:space-x-4 rounded-lg mb-6">
     <div className="relative flex-1 w-full md:w-auto">
       <IconSearch className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -92,22 +92,8 @@ const SearchAndFilterBar = ({ searchTerm, setSearchTerm, sortBy, setSortBy, layo
         onChange={(e) => setSearchTerm(e.target.value)}
       />
     </div>
-    <div className="flex items-center space-x-2 w-full md:w-auto">
-      <div className='select w-full md:w-auto'>
-        <Select value={sortBy} onValueChange={setSortBy}>
-          <SelectTrigger className="w-full md:w-[180px]">
-            <SelectValue placeholder="Sort by activity" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="activity">Sort By Activity</SelectItem>
-            <SelectItem value="name">Sort By Name</SelectItem>
-            <SelectItem value="popularity">Sort By Popularity</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-    </div>
     <div className="layout">
-      <Button variant="outline" onClick={toggleLayout}>
+      <Button className='border border-border text-foreground bg-neutral-50 dark:bg-neutral-950 hover:bg-neutral-100 dark:hover:bg-neutral-900' onClick={toggleLayout}>
         {layoutView === 'grid' ? <IconLayoutGrid /> : <IconList />}
       </Button>
     </div>

@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react'
-import { useParams, useNavigate} from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import LoadingScreen from '../../components/layout/LoadingScreen';
 import { ThemeRoom } from '../../types/ThemeRoom';
 import { Story } from "../../types/Story"
@@ -8,6 +8,7 @@ import { getSingleThemeRoom } from '../../services/themeRoomAPI';
 import { fetchStoriesByThemeRoomId } from "../../services/storyAPI";
 import { PlusCircle } from 'lucide-react';
 import StoryTree from './StoryTree';
+import { Button } from '../../components/ui/button';
 
 const StoryMap: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -24,7 +25,6 @@ const StoryMap: React.FC = () => {
                 setIsLoading(false);
                 return;
             }
-
             try {
                 setIsLoading(true);
                 const [themeRoomResponse, storiesResponse] = await Promise.all([
@@ -40,10 +40,8 @@ const StoryMap: React.FC = () => {
                 setIsLoading(false);
             }
         };
-
         fetchData();
     }, [id]);
-
 
     const handleCreateStory = () => {
         navigate(`/create-story`);
@@ -54,17 +52,21 @@ const StoryMap: React.FC = () => {
     if (!themeRoom) return <div>Theme room not found</div>;
 
     return (
-        <div className="">
+        <div className="h-screen">
             {stories.length === 0 ? (
-                <div className="text-center mt-8">
-                    <p className="mb-4">No stories yet. Be the first to create one!</p>
-                    <button
-                        onClick={handleCreateStory}
+                <div className="flex flex-col items-center justify-center h-full">
+                    <p className="mb-4 text-center">No stories yet. Be the first to create one!</p>
+                    {/* <button
+                        
                         className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded inline-flex items-center"
                     >
                         <PlusCircle size={20} className="mr-2" />
                         Create Your First Story
-                    </button>
+                    </button> */}
+                    <Button onClick={handleCreateStory}>
+                        <PlusCircle size={20} className="mr-2" />
+                        Create Your First Story
+                    </Button>
                 </div>
             ) : (
                 <StoryTree stories={stories} />
