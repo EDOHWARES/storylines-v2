@@ -59,8 +59,12 @@
 }
 body {
   font-family: "Plus Jakarta Sans", sans-serif;
-  letter-spacing: -0.5px
 }
+
+h1{
+  letter-spacing: -0.5px;
+}
+
 @layer base {
   * {
     @apply border-border;
