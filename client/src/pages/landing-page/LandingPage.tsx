@@ -1,28 +1,24 @@
 import React from 'react';
-import NavBar from '../../components/layout/NavBar';
 import Hero from './Hero';
 import StoryShowcase from './StoryShowcase';
 import Questions from './Questions';
-import Footer from './Footer';
+import Features from './Features';
 
 const LandingPage = () => {
   return (
     <main>
-      <section className="nav-bar">
-        <NavBar />
-      </section>
-      <div className='bg-pattern'>
+      <div className=''>
         <section>
           <Hero />
+        </section>
+        <section>
+          <Features />
         </section>
         <section>
           <StoryShowcase />
         </section>
         <section>
           <Questions />
-        </section>
-        <section>
-          <Footer />
         </section>
       </div>
     </main>

@@ -6,60 +6,6 @@ import AnimatedShinyText from '../../components/magicui/animated-shiny-text';
 import { BentoGrid, BentoCard } from "../../components/magicui/bento-grid";
 import { cn } from '../../lib/utils';
 
-// Import images
-import collaborateImage from '../../assets/images/landing-page/collaborate.svg';
-import exploreImage from '../../assets/images/landing-page/explore.svg';
-import choosePathImage from '../../assets/images/landing-page/choose_path.svg';
-import writeBranchImage from '../../assets/images/landing-page/write_branch.svg';
-import inspiredImage from '../../assets/images/landing-page/inspired.svg';
-
-const features = [
-    {
-      Icon: IconPencil,
-      name: "Write & Branch",
-      description: "Create the first node of your story and watch it branch into infinite possibilities.",
-      href: "/",
-      cta: "Learn more",
-      background: <img src={writeBranchImage} className="absolute -top-50 mt-5" alt="Write & Branch" />,
-      className: "md:col-span-2 md:row-span-2",
-    },
-    {
-      Icon: IconSearch,
-      name: "Explore Stories",
-      description: "Dive into a vast universe of interconnected tales crafted by our community.",
-      href: "/",
-      cta: "Learn more",
-      background: <img src={exploreImage} className="absolute -top-20 mt-5" alt="Explore Stories" />,
-      className: "md:col-span-1 md:row-span-1",
-    },
-    {
-      Icon: IconRoad,
-      name: "Choose Your Path",
-      description: "Navigate through branching narratives and shape the story as you read.",
-      href: "/",
-      cta: "Learn more",
-      background: <img src={choosePathImage} className="absolute -top-20" alt="Choose Your Path" />,
-      className: "md:col-span-1 md:row-span-1",
-    },
-    {
-      Icon: IconUsers,
-      name: "Collaborate",
-      description: "Join forces with other writers to create expansive story worlds.",
-      href: "/",
-      cta: "Learn more",
-      background: <img src={collaborateImage} className="absolute -top-20" alt="Collaborate" />,
-      className: "md:col-span-1 md:row-span-1",
-    },
-    {
-      Icon: IconBulb,
-      name: "Get Inspired",
-      description: "Spark your creativity with unique narratives.",
-      href: "/",
-      cta: "Learn more",
-      background: <img src={inspiredImage} className="absolute -top-20" alt="Get Inspired" />,
-      className: "md:col-span-1 md:row-span-1",
-    },
-  ];
   
 const Hero = () => {
   const navigate = useNavigate();
@@ -93,14 +39,6 @@ const Hero = () => {
             <Button variant="default" onClick={() => navigate('/home')} className="w-full sm:w-auto">Start Writing</Button>
             <Button variant="secondary" className="w-full sm:w-auto">Explore Stories</Button>
           </div>
-        </div>
-
-        <div className="mt-16">
-          <BentoGrid className="grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {features.map((feature) => (
-              <BentoCard key={feature.name} {...feature} />
-            ))}
-          </BentoGrid>
         </div>
       </div>
     </div>

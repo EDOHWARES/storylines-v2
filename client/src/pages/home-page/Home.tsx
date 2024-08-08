@@ -7,7 +7,7 @@ import { capitalize } from "../../utils/capitalize";
 import { Input } from '../../components/ui/input';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../../components/ui/select";
 import { Button } from '../../components/ui/button';
-import { IconSearch, IconHeart, IconLayoutGrid } from '@tabler/icons-react';
+import { IconSearch, IconHeart, IconLayoutGrid, IconList } from '@tabler/icons-react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../../components/ui/card";
 import { Badge } from "../../components/ui/badge";
 
@@ -35,6 +35,10 @@ const Home = () => {
     fetchThemeRooms();
   }, []);
 
+  const toggleLayout = () => {
+    setLayoutView(prevLayout => prevLayout === 'grid' ? 'list' : 'grid');
+  }
+
   if (isLoading) return <LoadingScreen />;
   if (error) return <div className="p-8 text-center text-red-500">Error: {error}</div>;
 
@@ -49,7 +53,7 @@ const Home = () => {
   };
 
   return (
-    <div className="flex-grow p-4 md:p-8 overflow-y-auto">
+    <div className="flex-grow p-4 md:p-8 overflow-y-auto ">
       <div className="max-w-7xl mx-auto">
         <Header />
         <SearchAndFilterBar
@@ -58,7 +62,7 @@ const Home = () => {
           sortBy={sortBy}
           setSortBy={setSortBy}
           layoutView={layoutView}
-          setLayoutView={setLayoutView}
+          toggleLayout={toggleLayout}
         />
         <ThemeRoomGrid
           rooms={filteredRooms}
@@ -71,12 +75,12 @@ const Home = () => {
 }
 
 const Header = () => (
-  <div className="flex justify-between items-center mb-6 md:mb-8">
+  <div className="flex justify-between items-center mb-6 md:mb-8 pt-16 sm:pt-24">
     <h1 className="text-3xl md:text-4xl font-bold">Theme Rooms</h1>
   </div>
 );
 
-const SearchAndFilterBar = ({ searchTerm, setSearchTerm, sortBy, setSortBy, layoutView, setLayoutView }) => (
+const SearchAndFilterBar = ({ searchTerm, setSearchTerm, sortBy, setSortBy, layoutView, toggleLayout }) => (
   <div className="flex flex-col md:flex-row items-start md:items-center justify-between p-2 bg-background space-y-4 md:space-y-0 md:space-x-4 rounded-lg mb-6">
     <div className="relative flex-1 w-full md:w-auto">
       <IconSearch className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -101,22 +105,11 @@ const SearchAndFilterBar = ({ searchTerm, setSearchTerm, sortBy, setSortBy, layo
           </SelectContent>
         </Select>
       </div>
-      {/* <div className="layout-format border-border">
-        <Tabs value={layoutView} onValueChange={setLayoutView} className='border-border'>
-          <TabsList>
-            <TabsTrigger value="grid">
-              <Button variant="outline" className='bg-transparent' size="icon">
-                <IconLayoutGrid className="h-4 w-4" />
-              </Button>
-            </TabsTrigger>
-            <TabsTrigger value="list">
-              <Button variant="outline" size="icon">
-                <IconLayoutGrid className="h-4 w-4 rotate-90" />
-              </Button>
-            </TabsTrigger>
-          </TabsList>
-        </Tabs>
-      </div> */}
+    </div>
+    <div className="layout">
+      <Button variant="outline" onClick={toggleLayout}>
+        {layoutView === 'grid' ? <IconLayoutGrid /> : <IconList />}
+      </Button>
     </div>
   </div>
 );
@@ -124,37 +117,38 @@ const SearchAndFilterBar = ({ searchTerm, setSearchTerm, sortBy, setSortBy, layo
 const ThemeRoomGrid = ({ rooms, handleRoomClick, layoutView }) => (
   <div className={`grid gap-6 ${layoutView === 'grid' ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'}`}>
     {rooms.map((room) => (
-      <ThemeRoomCard key={room._id} room={room} onClick={() => handleRoomClick(room._id)} />
+      <ThemeRoomCard key={room._id} room={room} onClick={() => handleRoomClick(room._id)} layoutView={layoutView} />
     ))}
   </div>
 );
 
-const ThemeRoomCard = ({ room, onClick }) => (
+const ThemeRoomCard = ({ room, onClick, layoutView }) => (
   <Card
-    className="h-full flex flex-col transition-all duration-300 ease-in-out hover:shadow-lg hover:-translate-y-1 cursor-pointer"
+    className={`h-full flex ${layoutView === 'list' ? 'flex-row items-center' : 'flex-col'} transition-all duration-300 ease-in-out hover:shadow-lg hover:-translate-y-1 cursor-pointer relative`}
     onClick={onClick}
   >
-    <CardHeader className="relative">
-      <FavoriteButton />
-      <CardTitle>{room.name}</CardTitle>
+    <CardHeader className={`relative ${layoutView === 'list' ? 'flex-shrink-0 w-1/4 self-stretch flex flex-col justify-center' : ''}`}>
+      <CardTitle className={layoutView === 'list' ? 'text-center' : ''}>{room.name}</CardTitle>
     </CardHeader>
-    <CardContent className="flex-grow">
-      <p className="text-sm text-muted-foreground">{room.description}</p>
+    <CardContent className={`flex-grow ${layoutView === 'list' ? 'w-1/2 flex items-center p-4' : ''}`}>
+      <p className="text-sm text-muted-foreground text-left">{room.description}</p>
     </CardContent>
-    <CardFooter>
+    <CardFooter className={`${layoutView === 'list' ? 'w-1/4 self-stretch flex flex-col justify-center p-0 mr-5' : ''}`}>
       <TagList tags={room.tags} />
     </CardFooter>
+    <FavoriteButton layoutView={layoutView} />
   </Card>
 );
 
-const FavoriteButton = () => (
+const FavoriteButton = ({ layoutView }) => (
   <Button
-    variant="ghost"
     size="icon"
-    className="absolute top-2 right-2 hover:bg-transparent"
+    className={`absolute bg-transparent hover:bg-transparent text-muted-foreground ${
+      layoutView === 'list' ? 'top-1/2 -translate-y-1/2 right-2' : 'top-2 right-2'
+    }`}
     onClick={(e) => {
       e.stopPropagation();
-      // Add favorite logic here
+      // add logic here
     }}
   >
     <IconHeart className="h-5 w-5" />

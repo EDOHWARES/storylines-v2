@@ -9,11 +9,16 @@ import CreateStory from './pages/create-story/CreateStory';
 import LandingPage from './pages/landing-page/LandingPage';
 import DisplayStory from './pages/story/DisplayStory';
 import { ThemeProvider } from './components/theme-provider';
+import NavBar from './components/layout/NavBar';
+import Footer from './components/layout/Footer';
 
 const App: React.FC = () => {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <div className="App">
+        <div className="nav-bar">
+          <NavBar />
+        </div>
         <Routes>
           <Route path='/' element={<LandingPage />} />
           <Route path="/home" element={<Home />} />
@@ -24,6 +29,9 @@ const App: React.FC = () => {
           <Route path="story" element={<DisplayStory />} />
           <Route path="/create-story" element={<CreateStory />} />
         </Routes>
+        <div className="footer">
+          <Footer />
+        </div>
       </div>
     </ThemeProvider>
   );

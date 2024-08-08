@@ -18,6 +18,11 @@ const NavBar: React.FC = () => {
     { Icon: IconBrandX, text: "X (Twitter)" },
   ];
 
+  const loggedInLinks = [
+    {href : '#', text : 'Theme Rooms'},
+    {href : '#', text: 'Bookmarks'}
+  ]
+
   return (
     <nav className="w-full fixed z-50 transition-all duration-300 border-b border-border/40 backdrop-blur-xl">
       <div className="mx-auto px-4 sm:px-6 lg:px-8">
@@ -36,15 +41,15 @@ const NavBar: React.FC = () => {
           </div>
           <div className="hidden md:flex items-center space-x-2">
             {socialLinks.map(({ Icon, text }) => (
-              <Button key={text} variant="ghost" size="icon" className="hidden lg:inline-flex">
+              <Button key={text} variant="custom" size="icon" className="hidden lg:inline-flex">
                 <Icon className="h-5 w-5" />
               </Button>
             ))}
             <ModeToggle />
-            <Button variant="outline">Sign In</Button>
+            <Button variant="custom2">Sign In</Button>
           </div>
           <div className="md:hidden">
-            <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+            <Button variant="custom" size="icon" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
               {isMobileMenuOpen ? <IconX className="h-5 w-5" /> : <IconMenu2 className="h-5 w-5" />}
             </Button>
           </div>
@@ -70,7 +75,7 @@ const NavBar: React.FC = () => {
             </div>
             <div className="mt-3 px-2 space-y-1">
               {socialLinks.map(({ Icon, text }) => (
-                <Button key={text} variant="ghost" className="w-full justify-start">
+                <Button key={text} variant="custom" className="w-full justify-start">
                   <Icon className="h-5 w-5 mr-2" />
                   {text}
                 </Button>

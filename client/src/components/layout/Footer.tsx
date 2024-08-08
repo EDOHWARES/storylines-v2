@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import { ModeToggle } from '../mode-toggle';
 
 const Footer = () => {
   return (
@@ -8,11 +9,12 @@ const Footer = () => {
           <h2 className="text-2xl font-bold">StoryLines</h2>
           <p className="text-sm text-muted-foreground mt-2">Weaving tales, one node at a time</p>
         </div>
-        <nav className="flex flex-wrap justify-center md:justify-end">
+        <nav className="flex flex-wrap justify-center items-center md:justify-end">
           <a href="/about" className="mx-3 nav-link">About</a>
           <a href="/contact" className="mx-3 nav-link">Contact</a>
           <a href="/privacy" className="mx-3 nav-link">Privacy Policy</a>
           <a href="/terms" className="mx-3 nav-link">Terms of Service</a>
+          <ModeToggle />
         </nav>
       </div>
       <div className="container mx-auto mt-8 text-center text-sm text-muted-foreground">
