@@ -18,7 +18,7 @@ const StoryNode: React.FC<StoryNodeProps> = ({ data }) => {
     };
 
     const handleCreateStoryClick = () => {
-        navigate(`/create-story`, { state: { prevStoryId: data._id } });
+        navigate(`/create-story`, { state: { prevStoryId: data._id, themeRoomId: data.themeRoomId } });
     };
 
     const formatDate = (dateString: string) => {
@@ -42,9 +42,9 @@ const StoryNode: React.FC<StoryNodeProps> = ({ data }) => {
                 <div className="space-y-4">
                     <div>
                         <h3 className="text-xl font-semibold">{data.title}</h3>
-                        <p className="text-gray-600 text-sm">{data.content.substring(0, 100)}...</p>
+                        <p className="text-muted-foreground text-sm">{data.content.substring(0, 100)}...</p>
                     </div>
-                    <div className="flex items-center justify-between text-gray-500 text-sm">
+                    <div className="flex items-center justify-between text-muted-foreground text-sm">
                         <div className="flex items-center gap-2">
                             <p>Anonymous</p>
                         </div>
@@ -59,15 +59,15 @@ const StoryNode: React.FC<StoryNodeProps> = ({ data }) => {
                     </Button>
                 </div>
                 <div className="absolute -top-3 -right-3 flex space-x-2">
-                    <button className="p-1.5 rounded-full bg-neutral-100 dark:bg-neutral-900 shadow-sm hover:shadow-md transition-all duration-200 border border-border hover:-translate-y-0.5">
+                    <button className="p-1.5 rounded-full bg-neutral-100 dark:bg-neutral-900 shadow-sm hover:shadow-md transition-all duration-200 border border-border">
                         <Check className="w-4 h-4 text-green-500" />
                     </button>
-                    <button className="p-1.5 rounded-full bg-neutral-100 dark:bg-neutral-900 shadow-sm hover:shadow-md transition-all duration-200 border border-border hover:-translate-y-0.5">
+                    <button className="p-1.5 rounded-full bg-neutral-100 dark:bg-neutral-900 shadow-sm hover:shadow-md transition-all duration-200 border border-border ">
                         <Bookmark className="w-4 h-4 text-blue-500" />
                     </button>
                     <button
                         onClick={handleCreateStoryClick}
-                        className="p-1.5 rounded-full bg-neutral-100 dark:bg-neutral-900 shadow-sm hover:shadow-md transition-all duration-200 border border-border hover:-translate-y-0.5"
+                        className="p-1.5 rounded-full bg-neutral-100 dark:bg-neutral-900 shadow-sm hover:shadow-md transition-all duration-200 border border-border"
                     >
                         <BadgePlus className="w-4 h-4 text-purple-500" />
                     </button>

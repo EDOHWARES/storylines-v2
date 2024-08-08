@@ -5,7 +5,6 @@ import { getAllThemeRooms } from "../../services/themeRoomAPI";
 import LoadingScreen from "../../components/layout/LoadingScreen";
 import { capitalize } from "../../utils/capitalize";
 import { Input } from '../../components/ui/input';
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../../components/ui/select";
 import { Button } from '../../components/ui/button';
 import { IconSearch, IconHeart, IconLayoutGrid, IconList } from '@tabler/icons-react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../../components/ui/card";
@@ -16,7 +15,6 @@ const Home = () => {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortBy, setSortBy] = useState('activity');
   const [layoutView, setLayoutView] = useState('grid');
   const navigate = useNavigate();
 
@@ -59,8 +57,6 @@ const Home = () => {
         <SearchAndFilterBar
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
-          sortBy={sortBy}
-          setSortBy={setSortBy}
           layoutView={layoutView}
           toggleLayout={toggleLayout}
         />

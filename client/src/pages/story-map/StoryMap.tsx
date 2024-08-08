@@ -44,7 +44,7 @@ const StoryMap: React.FC = () => {
     }, [id]);
 
     const handleCreateStory = () => {
-        navigate(`/create-story`);
+        navigate(`/create-story`, { state : {themeRoomId : id, rootNode: true}});
     };
 
     if (isLoading) return <LoadingScreen />;

@@ -17,13 +17,15 @@ import {
   IconUser,
   IconHelp,
   IconHeart,
-  IconLogout
+  IconLogout,
+  IconBooks
 } from '@tabler/icons-react'
 import { ModeToggle } from "../mode-toggle"
 
 const menuItems = [
   { icon: IconHome, label: 'Home', link: '/' },
   { icon: IconBookmark, label: 'Bookmarks', link: '/bookmarks' },
+  { icon: IconBooks, label: 'Storybooks', link: '/storybooks' },
   { icon: IconUser, label: 'Profile', link: '/profile' },
   { icon: IconHelp, label: 'Support', link: '/support' },
   { icon: IconHeart, label: 'Donate', link: '/donate' },
