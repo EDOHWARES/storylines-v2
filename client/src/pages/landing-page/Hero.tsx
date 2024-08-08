@@ -1,15 +1,13 @@
 import React from 'react';
 import { useNavigate } from "react-router-dom";
-import { IconArrowRight, IconPencil, IconSearch, IconRoad, IconUsers, IconBulb } from '@tabler/icons-react';
+import { IconArrowRight, IconBrandX, IconBrandGithub, IconBrandDiscord } from '@tabler/icons-react';
 import { Button } from '../../components/ui/button';
 import AnimatedShinyText from '../../components/magicui/animated-shiny-text';
 import { BentoGrid, BentoCard } from "../../components/magicui/bento-grid";
 import { cn } from '../../lib/utils';
 
-  
 const Hero = () => {
   const navigate = useNavigate();
-
   return (
     <div className="min-h-screen flex flex-col justify-center px-4 sm:px-6 lg:px-8 pt-16 sm:pt-24">
       <div className="max-w-7xl mx-auto w-full">
@@ -28,16 +26,27 @@ const Hero = () => {
               </div>
             </div>
           </div>
-          
+         
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-foreground mb-4">
             Craft Your <span className='text-accent'>Infinite</span> Story
           </h1>
           <p className="text-lg sm:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Dive into a world where every reader is a writer, and every story branches into endless possibilities. 
+            Dive into a world where every reader is a writer, and every story branches into endless possibilities.
           </p>
-          <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+          <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 mb-8">
             <Button variant="default" onClick={() => navigate('/home')} className="w-full sm:w-auto">Start Writing</Button>
             <Button variant="secondary" className="w-full sm:w-auto">Explore Stories</Button>
+          </div>
+          <div className="flex justify-center space-x-6">
+            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-muted-foreground transition-colors">
+              <IconBrandGithub className="w-6 h-6" />
+            </a>
+            <a href="https://x.com" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-muted-foreground transition-colors">
+              <IconBrandX className="w-6 h-6" />
+            </a>
+            <a href="https://discord.com" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-muted-foreground transition-colors">
+              <IconBrandDiscord className="w-6 h-6" />
+            </a>
           </div>
         </div>
       </div>

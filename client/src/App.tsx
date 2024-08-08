@@ -15,20 +15,20 @@ import Footer from './components/layout/Footer';
 const App: React.FC = () => {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <div className="App">
-        <div className="nav-bar">
-          <NavBar />
-        </div>
-        <Routes>
-          <Route path='/' element={<LandingPage />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/favorites" element={<Favorites />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/help" element={<Help />} />
-          <Route path="/story-map/:id" element={<StoryMap />} />
-          <Route path="story" element={<DisplayStory />} />
-          <Route path="/create-story" element={<CreateStory />} />
-        </Routes>
+      <div className="App relative overflow-y-hidden">
+        <NavBar />
+        <main className="">
+          <Routes>
+            <Route path='/' element={<LandingPage />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/favorites" element={<Favorites />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/help" element={<Help />} />
+            <Route path="/story-map/:id" element={<StoryMap />} />
+            <Route path="story" element={<DisplayStory />} />
+            <Route path="/create-story" element={<CreateStory />} />
+          </Routes>
+        </main>
         <div className="footer">
           <Footer />
         </div>
