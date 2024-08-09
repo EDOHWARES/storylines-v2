@@ -14,9 +14,11 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/dompurify": "^3.0.5",
     "concurrently": "^8.2.2"
   },
   "dependencies": {
-    "@tabler/icons": "^3.11.0"
+    "@tabler/icons": "^3.11.0",
+    "dompurify": "^3.1.6"
   }
 }

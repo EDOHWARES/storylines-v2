@@ -9,6 +9,7 @@ import { createStory } from '../../services/storyAPI';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { IconBold, IconItalic, IconList, IconListNumbers, IconH2 } from '@tabler/icons-react';
+import { sanitizeHtml } from '../../utils/htmlSanitizer';
 
 const CreateStory: React.FC = () => {
   const navigate = useNavigate();
@@ -27,6 +28,11 @@ const CreateStory: React.FC = () => {
     content: '<p>Start writing your story here...</p>',
   });
 
+  const processContent = (content: string): string => {
+    const sanitizedContent = sanitizeHtml(content);
+    return sanitizedContent.replace(/<\/p><p>/g, '</p><br><p>');
+  };
+
   const handleSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
@@ -34,14 +40,13 @@ const CreateStory: React.FC = () => {
     try {
       const newStory: Partial<Story> = {
         title: storyTitle,
-        content: editor?.getHTML() || '',
+        content: processContent(editor?.getHTML() || ''),
         type: rootNode ? 'root' : 'child',
         themeRoomId: themeRoomId,
         prev: prevStoryId ? [prevStoryId] : [],
         author: ['66a8449eb7c52cb3dec16071'],
       };
-      const createdStory = await createStory(newStory);
-      console.log('Story created successfully:', createdStory);
+      await createStory(newStory);
       navigate(-1);
     } catch (err) {
       console.error('Error creating story:', err);
@@ -50,6 +55,8 @@ const CreateStory: React.FC = () => {
       setIsLoading(false);
     }
   }, [storyTitle, editor, rootNode, themeRoomId, prevStoryId, navigate]);
+
+
 
   return (
     <div className="min-h-screen pt-20 px-4 sm:px-6 lg:px-8">

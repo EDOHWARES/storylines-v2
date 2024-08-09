@@ -87,8 +87,8 @@ const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <nav className='fixed top-0 left-0 right-0 m-2 z-10'>
-      <div className='flex sm:w-1/2 sm:translate-x-1/2 items-center justify-between border border-border sm:m-5 p-3 sm:p-5 bg-neutral-50/80 dark:bg-neutral-950/80 rounded-xl sm:rounded-full backdrop-blur-xl'>
+    <nav className='fixed top-0 left-0 right-0 flex justify-center items-start m-2 z-10'>
+      <div className='flex w-full sm:w-1/3 items-center justify-between border border-border sm:m-5 p-3 bg-neutral-50/80 dark:bg-neutral-950/80 rounded-xl sm:rounded-full backdrop-blur-xl'>
         <div className="name">
           <h1 className='text-lg sm:text-xl font-bold'>StoryLines</h1>
         </div>
