@@ -1,26 +1,24 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IStory extends Document {
+  customId?: string;
   title: string;
-  type: string;
+  type: 'root' | 'child';
   content: string;
-  author: mongoose.Types.ObjectId[];
   themeRoomId: mongoose.Types.ObjectId;
   prev: mongoose.Types.ObjectId[];
   next: mongoose.Types.ObjectId[];
-  customId?: string;
 }
 
 const StorySchema: Schema = new Schema(
   {
+    customId: { type: String, unique: true, sparse: true },
     title: { type: String, required: true },
-    type: { type: String, required: true },
+    type: { type: String, enum: ['root', 'child'], required: true },
     content: { type: String, required: true },
-    author: [{ type: mongoose.Types.ObjectId, ref: 'User', required: true }],
     themeRoomId: { type: mongoose.Types.ObjectId, ref: 'ThemeRoom', required: true },
     prev: [{ type: mongoose.Types.ObjectId, ref: 'Story' }],
-    next: [{ type: mongoose.Types.ObjectId, ref: 'Story' }],
-    customId: { type: String, unique: true, sparse: true }
+    next: [{ type: mongoose.Types.ObjectId, ref: 'Story' }]
   },
   { timestamps: true }
 );
