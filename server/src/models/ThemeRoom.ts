@@ -1,13 +1,5 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
 
-// document details
-
-// 1. ObjectId: unique id of the theme room (type: ObjectId, required: true)
-// 2. name: name of the theme room (type: string, required: true)
-// 3. description: description about the theme room (type: string, required: true)
-// 4. createdAt & updatedAt (type: ISO date, required: true)
-// 5. tags: tags to search for theme room and describe the content in the theme room (type: string[], required: true)
-
 
 export interface IThemeRoom extends Document {
     name: string;
