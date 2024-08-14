@@ -1,3 +1,0 @@
-Installation instructions
-Configuration setup
-Quick start guide
