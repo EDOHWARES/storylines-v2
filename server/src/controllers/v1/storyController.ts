@@ -27,12 +27,12 @@ export const fetchSingleStory = async (req: Request, res: Response): Promise<voi
 // http://localhost:5000/api/v1/stories
 export const createStory = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { title, type, content, author, themeRoomId, prev } = req.body;
+    const { title, type, content, authorId, themeRoomId, prev } = req.body;
     const story = await storyService.createStory({
       title,
       type: type || "child",
       content,
-      author: author.map((id: string) => new mongoose.Types.ObjectId(id)),
+      authorId : new mongoose.Types.ObjectId(authorId),
       themeRoomId: new mongoose.Types.ObjectId(themeRoomId),
       prev: prev ? prev.map((id: string) => new mongoose.Types.ObjectId(id)) : []
     });

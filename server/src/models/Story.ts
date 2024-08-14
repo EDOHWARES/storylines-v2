@@ -8,6 +8,7 @@ export interface IStory extends Document {
   type: 'root' | 'child';
   prev: mongoose.Types.ObjectId[];
   next: mongoose.Types.ObjectId[];
+  customId : string
 }
 
 const StorySchema: Schema = new Schema({
@@ -17,7 +18,8 @@ const StorySchema: Schema = new Schema({
   themeRoomId: { type: mongoose.Types.ObjectId, ref: 'ThemeRoom', required: true, index: true },
   type: { type: String, enum: ['root', 'child'], required: true },
   prev: [{ type: mongoose.Types.ObjectId, ref: 'Story' }],
-  next: [{ type: mongoose.Types.ObjectId, ref: 'Story' }]
+  next: [{ type: mongoose.Types.ObjectId, ref: 'Story' }],
+  customId : {type: String, required: true}
 }, {
   timestamps: true
 });

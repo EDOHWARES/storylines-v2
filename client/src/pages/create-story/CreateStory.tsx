@@ -44,7 +44,7 @@ const CreateStory: React.FC = () => {
         type: rootNode ? 'root' : 'child',
         themeRoomId: themeRoomId,
         prev: prevStoryId ? [prevStoryId] : [],
-        author: ['66a8449eb7c52cb3dec16071'],
+        authorId: '66a8449eb7c52cb3dec16071',
       };
       await createStory(newStory);
       navigate(-1);

@@ -59,7 +59,7 @@ export const fetchStoriesByThemeRooms = async (): Promise<{ stories: IStory[] }[
 // http://localhost:5000/api/v1/stories/theme-rooms/{themeRoomId}
 export const fetchStoriesByThemeRoomId = async (themeRoomId: string): Promise<IStory[]> => {
     const objectId = new mongoose.Types.ObjectId(themeRoomId);
-    const stories = await Story.find({ themeRoomId: objectId }).populate('author', 'name');
+    const stories = await Story.find({ themeRoomId: objectId }).populate('authorId', 'name');
     return stories;
 }
 

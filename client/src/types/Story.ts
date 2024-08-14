@@ -3,7 +3,7 @@ export interface Story {
     title: string;
     type: string;
     content: string;
-    author: string[];
+    authorId: string;
     themeRoomId: string;
     prev: string[];
     next: string[];
