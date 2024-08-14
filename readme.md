@@ -2,7 +2,12 @@
 
 A free and open-source storytelling platform that empowers you to create, contribute, and craft your own unique narratives.
 
-[Documentation](https://github.com/praneethravuri/storylines-v2/tree/main/docs)
+## Quick Links
+
+- [Full Documentation](https://github.com/praneethravuri/storylines-v2/tree/main/docs)
+- [Getting Started](https://github.com/praneethravuri/storylines-v2/tree/main/docs/getting-started.md)
+- [API Reference](https://github.com/praneethravuri/storylines-v2/tree/main/docs/api-reference.md)
+- [Contributing](https://github.com/praneethravuri/storylines-v2/tree/main/docs/contributing.md)
 
 ## Description
 
@@ -26,15 +31,27 @@ Start your storytelling journey with StoryLines today!
 
 ## Tech Stack
 
-* **Vite**
-* **Node.js**
-* **Express.js**
-* **React**
-* **TypeScript**
-* **MongoDB** with **Mongoose**
-* **Tailwind CSS**
-* **@xyflow/react**
-* **Framer Motion**
-* **Tabler Icons**
-* **Shad-cn**
-* **Magic-ui**
+* Vite
+* Node.js
+* Express.js
+* React
+* TypeScript
+* MongoDB with Mongoose
+* Tailwind CSS
+* @xyflow/react
+* Framer Motion
+* Tabler Icons
+* Shad-cn
+* Magic-ui
+
+## Documentation
+
+For more detailed information about StoryLines, please refer to our [full documentation](https://github.com/praneethravuri/storylines-v2/tree/main/docs).
+
+## Contributing
+
+We welcome contributions! Please see our [Contributing Guide](https://github.com/praneethravuri/storylines-v2/tree/main/docs/contributing.md) for more details.
+
+## License
+
+[MIT License](LICENSE)
