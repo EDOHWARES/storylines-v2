@@ -1,3 +1,10 @@
+---
+name: UI Improvement
+about: Suggest an improvement for the user interface
+title: '[UI] '
+labels: 'ui, enhancement'
+assignees: ''
+---
 
 ## Current UI Element
 Describe the current UI element or area that needs improvement. Be as specific as possible.
