@@ -1,3 +1,0 @@
-Deployment instructions for various environments
-Configuration for production
-Performance optimization tips

@@ -15,6 +15,7 @@ Welcome to the StoryLines documentation. Here you'll find comprehensive guides a
 1. [Introduction](introduction.md)
 2. [Getting Started](getting-started.md)
 5. [API Reference](api-reference.md)
+6. [Error Handling](error-handling.md)
 
 
 For more information about StoryLines, please refer to the [main README](../README.md) in the root of our repository.
