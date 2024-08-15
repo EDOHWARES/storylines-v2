@@ -331,4 +331,4 @@ If you exceed these limits, you'll receive a 429 Too Many Requests response.
 
 -   **v1.0.0** (2024-08-14): Initial release of the API
 
-For any questions or issues, please contact our developer support at dev-support@storylines.com.
+<!-- For any questions or issues, please contact our developer support at dev-support@storylines.com. -->
